@@ -13,6 +13,10 @@ def trim_and_repeat(base_string: str, offset: int = 0, repetitions: int = 1) -> 
 
 
 some_string: str = input('Input some string (required parameter): ')
+if some_string == '':
+    print('No required parameter! Exit.')
+    exit()
+
 cut_num = input('Input cut length (if no, just press "Enter"): ')
 repeat_num = input('Input repeat number (if no, press "Enter" to): ')
 
