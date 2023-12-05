@@ -1,20 +1,20 @@
-# В переменной хранится словарь, содержащий гео-метки для каждого пользователя (пример структуры данных приведен ниже).
-# Вам необходимо написать программу, которая выведет на экран множество уникальных гео-меток всех пользователей.
+# Дана переменная, в которой хранится слово из латинских букв.
+# Напишите код, который выводит на экран:
+# * среднюю букву, если число букв в слове нечётное;
+# * две средних буквы, если число букв чётное.
 #
 # Пример работы программы:
-#
-# ids = {'user1': [213, 213, 213, 15, 213],
-#        'user2': [54, 54, 119, 119, 119],
-#        'user3': [213, 98, 98, 35]}
-# Результат: {98, 35, 15, 213, 54, 119}
 
+# 1. word = 'test' Результат: es
+# 2. word = 'testing' Результат: t
 
-users_geomarks: dict = {'user1': [213, 213, 213, 15, 213],
-                        'user2': [54, 54, 119, 119, 119],
-                        'user3': [213, 98, 98, 35]}
-
-final_result: list = list()
-for value in users_geomarks.values():
-    final_result += value
-
-print(f'And final result are: {set(final_result)}')
+input_word: str = input('Введите слово из латинских букв (именно латиских, хотя проверок тут нет) и нажмите Enter: ')
+if (len(input_word) % 2) == 0:
+    first_letter_index: int = (len(input_word) // 2) - 1
+    second_letter_index: int = (len(input_word) // 2) + 1
+    print(f'Result: {input_word[first_letter_index:second_letter_index]}')
+elif (len(input_word) % 2) == 1:
+    alone_letter_index: int = (len(input_word) // 2)
+    print(f'Result: {input_word[alone_letter_index]}')
+else:
+    print('Some strange result!')
