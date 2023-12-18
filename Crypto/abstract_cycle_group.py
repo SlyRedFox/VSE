@@ -1,10 +1,10 @@
 from math import gcd
 
 # ВВЕДИТЕ ЗНАЧЕНИЕ ГРУППЫ G
-group_g: int = 39
+group_g: int = 12
 
 
-def nod_of_elements(group: int) -> 'lists':
+def nod_of_elements(group: int) -> 'tuple':
     all_elements: list = [1]
     obr_elem = list()
     for elem in range(1, group):
