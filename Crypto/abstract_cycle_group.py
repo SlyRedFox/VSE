@@ -1,7 +1,7 @@
 from math import gcd
 
 # ВВЕДИТЕ ЗНАЧЕНИЕ ГРУППЫ G
-group_g: int = 12
+group_g: int = 17
 
 
 def nod_of_elements(group: int) -> 'tuple':
