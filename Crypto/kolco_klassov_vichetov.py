@@ -1,10 +1,10 @@
 from math import gcd
 
 # ВНЕСИТЕ базовое значение множества и модуль
-modul_ring = mod = 17
+modul_ring = mod = 49
 
 # ВНЕСТИТЕ значение образующего элемента
-poryadok: int = 3
+poryadok: int = 16
 
 
 def obraz_elements(group: int) -> 'list':
@@ -19,6 +19,7 @@ def obraz_elements(group: int) -> 'list':
 obraz_elem = obraz_elements(modul_ring)
 print(f'\nОбратимые элементы кольца: {obraz_elem}\n')
 
+print('Возведение в степень:')
 final_list = [1]
 for x in range(1, 100):
     print(f'{poryadok} в {x} степени {poryadok**x}')

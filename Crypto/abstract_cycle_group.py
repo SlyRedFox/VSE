@@ -1,7 +1,7 @@
 from math import gcd
 
 # ВВЕДИТЕ ЗНАЧЕНИЕ ГРУППЫ G
-group_g: int = 17
+group_g: int = 21
 
 
 def nod_of_elements(group: int) -> 'tuple':
@@ -19,6 +19,9 @@ def nod_of_elements(group: int) -> 'tuple':
 
 
 final_list, obraz_elem = nod_of_elements(group_g)
+
+print('Otladka')
+print(final_list)
 
 another_one_elem = list()
 for x in final_list:
