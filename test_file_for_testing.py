@@ -1,4 +1,4 @@
-from testing import multiplication_magic as mm_func
+from DZ_8.testing import multiplication_magic as mm_func
 
 
 def result_test(a: int, b: int):
