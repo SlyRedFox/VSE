@@ -78,7 +78,7 @@ elif (a > 1) and (b_from_formula % a) == 0:
 
     for num in range(1, a):
         print(f'Ответ {num + 1}')
-        print(f'({ã_base} * {b̃} + {ñ} * {num}) % {n_from_formula} = {(ã_base * b̃ + ñ * num) % n_from_formula}')
+        print(f'({ã_base} * {b̃} + {ñ} * {num}) mod {n_from_formula} = {(ã_base * b̃ + ñ * num) % n_from_formula}')
 
     print('\nПроверяем и выписываем все полученные ответы, подставляем их в исходное сравнение. В нашем базовом случае было: 111x ≡ 75 (mod 321)')
     print('Т.е. 111 * 99 ≡ 75 (mod 321) = 10989 mod 321 = 75 (детали в конспектах, страница 32)')
