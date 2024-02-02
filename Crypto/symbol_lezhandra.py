@@ -11,8 +11,8 @@
 #  ---
 #  557)
 
-chislitel_start: int = 426
-znamenatel_start: int = 557
+chislitel_start: int = 12
+znamenatel_start: int = 761
 
 print('\nРаскладываем на простые числа "числитель"')
 simple_chisla: list = []
@@ -25,9 +25,9 @@ while delitel <= chislitel_start:
     else:
         delitel += 1
 
-print(*simple_chisla)
+print(f'Результат: {simple_chisla}')
 
-print(f'Можем представить исходный пример как {len(simple_chisla)} разных дроби (записываем именно как дробь, пример на стр. 39 конспекта)')
+print(f'\nМожем представить исходный пример как {len(simple_chisla)} разных дроби (записываем именно как дробь, пример на стр. 39 конспекта)')
 count: int = 1
 for elem in simple_chisla:
     print(f'Номер {count}: {elem} / {znamenatel_start}')
