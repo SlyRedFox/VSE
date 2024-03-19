@@ -22,7 +22,7 @@ with open('invoice-42369643.html', 'rb') as file:
     response = requests.post(api_url, headers=headers, files=files)
 
 base_link = response.json()
-print(response.text)
+# print(response.text)
 url_for_analyses: str = base_link['data']['links']['self']
 # url_for_analyses: str = 'https://www.virustotal.com/api/v3/analyses/NjEyYjU3ZTJhZmU3MDY1ZWJlOTIxMzM3MTcwZGY3ZDQ6MTcxMDg3NTAxNw=='
 
@@ -39,6 +39,7 @@ all_statistic = response.json()
 # Укажите список антивирусов, которые обнаружили угрозы в формате: Detected, ALYac, Kaspersky
 # Сравните результаты с заданным списком антивирусов и песочниц.
 # Укажите, какие из указанных антивирусов (Fortinet, McAfee, Yandex, Sophos) детектировали угрозу, а какие нет.
+# TODO: прописать проверку статуса, что ниже???
 print(f'Status: {all_statistic['data']['attributes']['status']}')
 print(f'\nBase statistic: {all_statistic['data']['attributes']['stats']}')
 
