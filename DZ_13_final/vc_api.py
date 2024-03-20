@@ -3,7 +3,8 @@ import requests
 from store import pw
 from store import headers
 from pprint import pprint
-
+from time import sleep
+# TODO: добавить requiments.txt
 
 # Этап 1. Распаковка архива.
 # Используя Python распакуйте предоставленный архив и извлеките файлы
@@ -20,6 +21,7 @@ api_url: str = 'https://www.virustotal.com/api/v3/files'
 with open('invoice-42369643.html', 'rb') as file:
     files = {'file': ('invoice-42369643.html', file)}
     response = requests.post(api_url, headers=headers, files=files)
+sleep(2)
 
 base_link = response.json()
 # print(response.text)
@@ -30,8 +32,14 @@ url_for_analyses: str = base_link['data']['links']['self']
 # Этап 3. Обработка результатов сканирования.
 # Проанализируйте ответы от VirusTotal, собирая данные о детектировании угроз антивирусами.
 response = requests.get(url_for_analyses, headers=headers)
+sleep(2)
+if response.status_code == 200:
+    print('File uploaded!')
+else:
+    print('Error! File is not uploaded! Try again later.')
+    sleep(2)
+    exit()
 # print(response.text)
-all_statistic = response.json()
 
 
 # Этап 4. Подготовка отчета. Составьте отчет со статистикой результатов сканирования.
@@ -39,10 +47,9 @@ all_statistic = response.json()
 # Укажите список антивирусов, которые обнаружили угрозы в формате: Detected, ALYac, Kaspersky
 # Сравните результаты с заданным списком антивирусов и песочниц.
 # Укажите, какие из указанных антивирусов (Fortinet, McAfee, Yandex, Sophos) детектировали угрозу, а какие нет.
-# TODO: прописать проверку статуса, что ниже???
+all_statistic = response.json()
 print(f'Status: {all_statistic['data']['attributes']['status']}')
 print(f'\nBase statistic: {all_statistic['data']['attributes']['stats']}')
-
 print('\nAntiVirus statistic.')
 detected: list = list()
 not_detected: list = list()
@@ -60,7 +67,7 @@ pprint(f'Detected {len(detected)}: {detected}\n')
 pprint(f'Not detected {len(not_detected)}: {not_detected}')
 
 
-# Дополнительные задачи. 123
+# Дополнительные задачи.
 # Если доступен отчет VirusTotal Sandbox о поведении вредоноса, проанализируйте его и включите в свой отчет ключевые
 # моменты поведения вредоноса.
 # Выведите список доменов и IP-адресов, с которыми вредонос общается (для блокировки), и описание поведения (Behavior)
@@ -79,6 +86,10 @@ behaviour_summary_url: str = f'https://www.virustotal.com/api/v3/files/{md5_id}/
 # выводим данные behaviour, список доменов и IP-адресов
 response_file_behaviour = requests.get(behaviours_url, headers=headers)
 response_behaviour_summary = requests.get(behaviour_summary_url, headers=headers)
+
+print('\nИдёт анализ файла, пожалуйста, подождите 5 секунд...')
+sleep(5)
+# TODO: просто описать вывод нескольких компонентов, закомменченных, из summary
 # много данных, можно вывести в файлы при необходимости
 # print(response_file_behaviour.text)
 # print(response_behaviour_summary.text)
@@ -88,3 +99,6 @@ behaviour_summary_results = response_behaviour_summary.json()
 domens_and_ip = behaviour_summary_results['data']['dns_lookups']
 for elem in domens_and_ip:
     print(elem)
+
+# TODO: get a domain report
+# https://docs.virustotal.com/reference/domain-info
