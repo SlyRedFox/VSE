@@ -4,7 +4,7 @@ from store import pw
 from store import headers
 from pprint import pprint
 from time import sleep
-# TODO: добавить requiments.txt
+
 
 # Этап 1. Распаковка архива.
 # Используя Python распакуйте предоставленный архив и извлеките файлы
@@ -17,6 +17,7 @@ with pyzipper.AESZipFile('netology.zip', 'r', compression=pyzipper.ZIP_LZMA, enc
 
 # Этап 2. Анализ файлов через VirusTotal API.
 # Отправьте файлы на анализ, используя ваш персональный API ключ VirusTotal.
+# https://docs.virustotal.com/reference/files-scan
 api_url: str = 'https://www.virustotal.com/api/v3/files'
 with open('invoice-42369643.html', 'rb') as file:
     files = {'file': ('invoice-42369643.html', file)}
@@ -72,6 +73,7 @@ pprint(f'Not detected {len(not_detected)}: {not_detected}')
 # моменты поведения вредоноса.
 # Выведите список доменов и IP-адресов, с которыми вредонос общается (для блокировки), и описание поведения (Behavior)
 # от VirusTotal Sandbox, если таковое доступно.
+# https://docs.virustotal.com/reference/file-all-behaviours-summary
 
 # получаем данные из песочницы
 sha256: str = all_statistic['meta']['file_info']['sha256']
