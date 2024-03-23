@@ -26,9 +26,10 @@ beta_second: int = 9 # random число от 0 до 32, нашего n_mod
 
 # списки всех alpha и beta для последующей расшифровки, пока там только по два элемента
 alpha_list: list = list()
-beta_list: list = list()
 alpha_list.append(alpha_first)
 alpha_list.append(alpha_second)
+
+beta_list: list = list()
 beta_list.append(beta_first)
 beta_list.append(beta_second)
 
@@ -69,7 +70,7 @@ yks_list.append(y2)
 
 # Формула для последующих yi: произведение двух предыдущих alpha и сумма двух предыдущих beta (оба по n_mod)
 # уi = ((((alpha_first * alpha_second) mod n_mod) * x3) + ((beta_first + beta_second) mod n_mod)) mod n_mod
-# берём наш список с третьего элемента (т. к. первые два уже ушли для y1 и y2)
+# берём наш список с третьего элемента (т. к. первые два были для y1 и y2)
 # TODO: del
 num = 1
 for digit in numbers_of_letters[2:]:
@@ -102,18 +103,15 @@ for digit in numbers_of_letters[2:]:
     beta_second = beta_next
 
     # TODO: del
-    num +=1
+    num += 1
 
 print('\nЗашифрованная фраза:')
 print(crypto_symbols)
 
 
-
-
-
-
-
-print('\n\nРасшифровка. С помощью Расширенного алгоритма Евклида находим обратный элемент для каждой alpha.')
+# Расшифровка
+print('\n\nРасшифровка. С помощью Расширенного алгоритма Евклида находим обратный элемент для каждой alpha. Затем '
+      'расшифровываем по формуле: alpha_i**-1 * (y_i - beta_i) mod mod_n')
 reverse_elements_list: list = list()
 for element in alpha_list:
     reverse_element: int = rae(element, n_mod)
@@ -136,6 +134,12 @@ print(f'reverse_elements_list {reverse_elements_list}')
 # 2 -> в
 # 20 * (15 - 9) % 33
 # 21 -> ф
+
+decrypt_letter: str = ''
+for x in range(len(alpha_list)):
+    decrypt_letter = reverse_elements_list[x] * (yks_list[x] - beta_list[x]) % n_mod
+    # print(decrypt_letter)
+    print(rus_digit_letter[decrypt_letter])
 
 
 
