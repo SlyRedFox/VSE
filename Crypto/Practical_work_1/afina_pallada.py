@@ -1,5 +1,6 @@
-# Афинный шифр
+# Аффинный шифр
 # Шифр подстановочный. Криптографическое преобразование заменяет символы открытого текста на другие по правилу.
+# Базовое слово: вфеврале
 from pprint import pprint
 from general_store import arabian_digits
 from general_store import checkin_input_word
@@ -19,7 +20,7 @@ rus_lettet_digit: dict = dict(zip(true_alphabet, arabian_digits))
 rus_digit_letter: dict = dict(zip(arabian_digits, true_alphabet))
 
 
-our_word: str = input('\nЗдравствуй, %username%! \nПожалуйста, введи слово для «Афинного шифра» (только кириллица). '
+our_word: str = input('\nЗдравствуй, %username%! \nПожалуйста, введи слово для «Аффинного шифра» (только кириллица). '
                       'Спасибо! \nP.S.: есть базовая проверка ввода: ')
 
 checkin_input_word(our_word)
@@ -40,12 +41,12 @@ n_mod: int = 33
 # Число 7 взаимно простое с 33, т.к. у них разные простые множители, и они не имеют общих делителей, кроме 1.
 # Число 33, делители: 1, 3, 11, 33
 # Число 7, делители: 1, 7.
-# Ни один из делителей числа 33 не является делителем числа 7. Это означает, что число 7 и число 33 взаимно простые.
+# Ни один из делителей числа 33 не является делителем числа 7, поэтому числа 7 и 33 взаимно простые.
 alpha: int = 7
 beta: int = 14 # random число от 0 до 32, нашего n_mod
 
 # находим список y-ов по ф-ле из раздела "Зашифрование" уi = (alpha * xi + beta) mod n_mod
-# x1 = (7 * 2 + 14) % 33
+# # В базовом случае: x1 = (7 * 2 + 14) % 33
 crypto_symbols: list = list()
 for digit in numbers_of_letters:
     temp_y = (alpha * digit + beta) % n_mod
