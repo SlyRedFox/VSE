@@ -1,6 +1,5 @@
 # Аффинный рекуррентный шифр
 # Базовое слово: вфеврале
-from pprint import pprint
 from general_store import arabian_digits
 from general_store import checkin_input_word
 from general_store import true_alphabet
@@ -28,7 +27,7 @@ our_word: str = input('\nЗдравствуй, %username%! \nПожалуйст�
 checkin_input_word(our_word)
 
 
-# Зашифровыываем @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Зашифровываем
 # прописываем соответствие "буква алфавита - номер"
 print('\nПеревод элементов слова для шифрования в арабские цифры.')
 numbers_of_letters: list = []
@@ -37,19 +36,38 @@ for letter in our_word.lower():
 print(numbers_of_letters)
 
 
-# находим список y-ов по ф-ле из раздела "Зашифрование":
-# у1 = (alpha_first * xi + beta_first) mod n_mod
+# Находим список y-ов по ф-ле из раздела "Зашифрование":
+# Формула для у1:
+# у1 = (alpha_first * x1 + beta_first) mod n_mod
 # # В базовом случае: x1 = (7 * 2 + 14) % 33
-# y2 уже считаем по иной формуле:
-# y2 = (alpha_second * xi + beta_second) mod n_mod
 crypto_symbols: list = list()
-for digit in numbers_of_letters:
-    if numbers_of_letters.index(digit) % 2 == 0:
-        temp_chetnoe = (alpha_first * digit + beta_first) % n_mod
-        crypto_symbols.append(rus_digit_letter[temp_chetnoe])
-    elif numbers_of_letters.index(digit) % 2 == 1:
-        temp_nechetnoe = (alpha_second * digit + beta_second) % n_mod
-        crypto_symbols.append(rus_digit_letter[temp_nechetnoe])
+y1 = (alpha_first * numbers_of_letters[0] + beta_first) % n_mod
+crypto_symbols.append(rus_digit_letter[y1])
+
+# Формула для y2:
+# y2 = (alpha_second * x2 + beta_second) mod n_mod
+y2 = (alpha_second * numbers_of_letters[1] + beta_second) % n_mod
+crypto_symbols.append(rus_digit_letter[y2])
+
+# Формула для последующих yi: произведение двух предыдущих alpha и сумма двух предыдущих beta (оба по n_mod)
+# уi = ((((alpha_first * alpha_second) mod n_mod) * x3) + ((beta_first + beta_second) mod n_mod)) mod n_mod
+alpha_third = (alpha_first * alpha_second) % n_mod
+beta_third = (beta_first + beta_second) % n_mod
+
+# берём наш список с третьего элемента (т. к. первые два уже ушли для y1 и y2)
+for digit in numbers_of_letters[2:]:
+    alpha_next = (alpha_second * alpha_third) % n_mod
+    beta_next = (beta_second + beta_third) % n_mod
+
+    yi = (alpha_next * digit + beta_next) % n_mod
+    crypto_symbols.append(rus_digit_letter[yi])
+
+    # создаём новые значения alpha и beta для текущего цикла на основе предыдущих значений
+    alpha_second = alpha_third
+    alpha_third = alpha_next
+
+    beta_second = beta_third
+    beta_third = beta_next
 
 print('\nЗашифрованная фраза:')
-pprint(crypto_symbols)
+print(crypto_symbols)
