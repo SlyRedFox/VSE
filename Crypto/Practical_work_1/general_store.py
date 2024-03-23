@@ -32,7 +32,7 @@ def checkin_input_word(symbols: str) -> bool:
         simple_exit()
 
     for key in symbols:
-        print(f'Тщательно проверяем символ: {key}\n')
+        print(f'Тщательно проверяем символ: {key}')
         if (len(key) == 0) or (key in eng_alphabet_spec):
             simple_exit()
     print('Проверка пройдена успешно!')
