@@ -48,7 +48,7 @@ arabian_digits: list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
 # eng_lettet_digit: dict = dict(zip(eng_alphabet, arabian_digits))
 
 
-# пока в методе нет необходимости, сохранил на всякий случай
+# метод поиска делителей, пока в нём нет необходимости, сохранил на всякий случай
 # def find_delitels(input_num: int) -> list:
 #     """Находим делители для проверки ключей alpha"""
 #     temp_div_list: list = list()
@@ -64,6 +64,12 @@ def is_vzaimno_prostoe(n_num, alpha):
     while alpha:
         n_num, alpha = alpha, n_num % alpha
     return n_num
+
+
+# словарь {буква: цифра}
+rus_lettet_digit: dict = dict(zip(true_alphabet, arabian_digits))
+# словарь {цифра: буква}
+rus_digit_letter: dict = dict(zip(arabian_digits, true_alphabet))
 
 
 def checking_beta_key() -> int:
@@ -87,6 +93,60 @@ def checking_beta_key() -> int:
 
     return beta
 
+
+def crypt_func(original_word: str, alpha_arg: int, beta_arg: int, n_mod_arg: int) -> list:
+    """Зашифровываем вводное слово"""
+    # прописываем соответствие "буква алфавита - номер"
+    # перевод элементов слова для шифрования в арабские цифры
+    numbers_of_letters: list = []
+    for letter in original_word.lower():
+        numbers_of_letters.append(rus_lettet_digit[letter])
+
+    # находим список y-ов по ф-ле из раздела "Зашифрование" уi = (alpha * xi + beta) mod n_mod
+    # # В базовом случае: x1 = (7 * 2 + 14) % 33
+    crypto_symbols: list = list()
+    for digit in numbers_of_letters:
+        temp_y = (alpha_arg * digit + beta_arg) % n_mod_arg
+        crypto_symbols.append(rus_digit_letter[temp_y])
+    return crypto_symbols
+
+
+def uncrypt_func(original_crypted_word: str, alpha_arg: int, beta_arg: int, n_mod_arg: int) -> list:
+    """Расшифровываем изначально зашифрованные данные"""
+    # Проверяем элементы зашифрованной фразы по ф-ле из раздела "Расшифрование" xi = alpha**-1 * (yi - beta) mod n_mod
+    # с помощью Расширенного алгоритма Евклида найдём обратный элемент
+    reverse_element: int = rae(alpha_arg, n_mod_arg)
+
+    # находим цифры букв
+    elements_check: list = list()
+    for elem in original_crypted_word:
+        temp_x = reverse_element * (rus_lettet_digit[elem] - beta_arg) % n_mod_arg
+        elements_check.append(temp_x)
+
+    # восстанавливаем слово
+    uncrypted_list: list = list()
+    for elem in elements_check:
+        temp_letter = rus_digit_letter[elem]
+        uncrypted_list.append(temp_letter)
+    return uncrypted_list
+
+
+# это поиск обратного элемента по РАЕ и его проверка, если понадобится
+# def checking_crypto_phrase():
+#     """Проверяем найденные элементы"""
+#     print('\nОсуществляем проверку. С помощью Расширенного алгоритма Евклида найдём обратный элемент.')
+#     reverse_element: int = rae(alpha, n_mod)
+#     print(f'Результат вычисления РАЕ: {reverse_element}')
+#
+#     print('\nПроверяем корректность найденного обратного элемента.')
+#     # Ф-ла: (alpha * alpha**-1) ≡ 1 * mod n_mod
+#     # В базовом случае: 7 * 19 ≡ 1 * mod 33 = 133 ≡ 1 * mod 33 = 133 mod 33 = 1
+#     checking_reverse_element: int = (alpha * reverse_element) % n_mod
+#     if checking_reverse_element == 1:
+#         print('Проверка пройдена успешно!')
+#     else:
+#         print('Проверка не пройдена! Завершаем программу...')
+#         simple_exit()
 
 
 def rae(alpha: int, mod_n: int) -> int:
