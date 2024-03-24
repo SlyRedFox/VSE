@@ -6,19 +6,13 @@ from general_store import arabian_digits
 from general_store import checkin_input_word
 from general_store import is_vzaimno_prostoe
 
-from general_store import find_delitels
 from general_store import checking_beta_key
 from general_store import true_alphabet
 from general_store import simple_exit
 from general_store import rae
 
 
-# TODO: del продумать, будут ли английские символы?
-digits_eng: list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
-eng_alphabet: list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'i', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-eng_lettet_digit: dict = dict(zip(eng_alphabet, arabian_digits))
-
-# длина русского алфавита, через random можно выбрать beta
+# длина русского алфавита
 n_mod: int = 33
 
 # словарь {буква: цифра}
@@ -60,35 +54,11 @@ while checking_flag:
         print(f'Числа {n_mod} и {alpha} НЕ взаимно простые, введите иной ключ alpha!')
         continue
 
-
-# TODO: del + метод find_delitels() из хранилища
-# показываем делители числа n_mod (сейчас это 33)
-# n_mod_list: list = find_delitels(n_mod)
-# print(n_mod_list)
-#
-# # показываем делители числа alpha
-# alpha_list: list = find_delitels(alpha)
-# print(alpha_list)
-
-# проверяем, что n_mod и alpha взаимно простые
-# if n_mod_list[0] == alpha_list[0] == 1:
-#     print('Первый элеменот обоих списков единица.')
-# else:
-#     print(f'Ключ alpha {alpha} не подходит!')
-
-
-
-
-
-
-
-
-
-
 # вводим и проверяем ключ beta
 beta = checking_beta_key()
 
 
+# выводим проверку для пользователя
 input_user: str = input(f'\nЧто необходимо сделать со данными?\n1. Зашифровать.\n2. Расшифровать.\nСделайте выбор: ')
 if input_user == '1':
     pass
@@ -96,6 +66,16 @@ elif input_user == '2':
     pass
 else:
     simple_exit()
+
+
+
+
+
+
+
+
+# def crypto_func(our_word: str, alpha_key: int, beta_key: int) -> str:
+
 
 
 # прописываем соответствие "буква алфавита - номер"

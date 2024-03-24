@@ -5,8 +5,8 @@ from time import sleep
 true_alphabet: list = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с',
                        'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я']
 
-crypto_alphabet: list = ['б', 'а', 'г', 'в', 'е', 'д', 'ж', 'ё', 'и', 'з', 'к', 'й', 'м', 'л', 'о', 'н', 'р', 'п', 'т',
-                         'с', 'ф', 'у', 'ц', 'х', 'ш', 'ч', 'ъ', 'щ', 'ь', 'ы', 'я', 'э', 'ю']
+crypto_alphabet: list = ['с', 'п', 'ф', 'ш', 'ц', 'я', 'э', 'в', 'ъ', 'ы', 'з', 'д', 'х', 'л', 'у', 'ч', 'г', 'ю', 'ь',
+                         'б', 'р', 'о', 'е', 'м', 'ё', 'н', 'и', 'щ', 'т', 'к', 'й', 'ж', 'а']
 
 # для проверки корректного ввода, английский алфавит и спецсимволы
 eng_alphabet_spec: list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'i',
@@ -42,15 +42,21 @@ def checkin_input_word(symbols: str) -> bool:
 # Аффинный шифр и Аффинный рекуррентный шифр
 arabian_digits: list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
 
+# если понадобится английский алфавит
+# digits_eng: list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+# eng_alphabet: list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'i', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+# eng_lettet_digit: dict = dict(zip(eng_alphabet, arabian_digits))
 
-def find_delitels(input_num: int) -> list:
-    """Находим делители для проверки ключей alpha"""
-    temp_div_list: list = list()
-    print(f'Делители числа {input_num}:')
-    for elem in range(1, input_num + 1):
-        if input_num % elem == 0:
-            temp_div_list.append(elem)
-    return temp_div_list
+
+# пока в методе нет необходимости, сохранил на всякий случай
+# def find_delitels(input_num: int) -> list:
+#     """Находим делители для проверки ключей alpha"""
+#     temp_div_list: list = list()
+#     print(f'Делители числа {input_num}:')
+#     for elem in range(1, input_num + 1):
+#         if input_num % elem == 0:
+#             temp_div_list.append(elem)
+#     return temp_div_list
 
 
 def is_vzaimno_prostoe(n_num, alpha):
@@ -62,19 +68,23 @@ def is_vzaimno_prostoe(n_num, alpha):
 
 def checking_beta_key() -> int:
     """Вввод и проверка ключа beta"""
-    beta = input('\nВведите ключ beta, для русского алфавита это число от 0 до 32: ')
-    try:
-        beta = int(beta)
-    except Exception as err:
-        print(f'Не удалось привести к int введённые данные, это число? Сообщение: {err}')
-        simple_exit()
+    check_flag: bool = True
+    while check_flag:
+        beta = input('\nВведите ключ beta, для русского алфавита это число от 0 до 32: ')
+        try:
+            beta = int(beta)
+        except Exception as err:
+            print(f'Не удалось привести к int введённые данные, это число? Сообщение: {err}')
+            simple_exit()
 
-    print('Проверяем введённый ключ...')
-    if 0 <= beta <= 32:
-        print('Ключ beta корректный!')
-    else:
-        print('Ключ вне указанного диапазона!')
-        simple_exit()
+        print('Проверяем введённый ключ...')
+        if 0 <= beta <= 32:
+            print('Ключ beta корректный!')
+            check_flag = False
+        else:
+            print('Ключ вне указанного диапазона! Введите другой ключ.')
+            continue
+
     return beta
 
 
