@@ -121,44 +121,22 @@ def crypt_afina_recurr(n_mod_arg: int, alpha_first_key: int, alpha_second_key: i
     return crypto_symbols, yks_list
 
 
-# выбор для пользователя
-input_user: str = input(f'\nЧто необходимо сделать?\n1. Зашифровать.\n2. Расшифровать.\nСделайте выбор: ')
-# вызываем функцию тут, а не в выборе пользователя, т. к. нам нужен список y-ков (yks_list_from_func) для расшифровки
-crypto_phrase, yks_list_from_func = crypt_afina_recurr(n_mod, alpha_first_key, alpha_second_key, beta_first_key, beta_second_key)
-
-if input_user == '1':
-    print(crypto_phrase)
-    print('\nЗашифрованная фраза/слово: ')
-    print(''.join(crypto_phrase))
-elif input_user == '2':
-    pass
-    # uncrypted_word: list = uncrypt_func(our_word, alpha_key, beta_key, n_mod)
-    # print('\nРасшифрованная фраза/слово: ')
-    # print(''.join(uncrypted_word))
-else:
-    simple_exit()
-
-
-
-
-
-
 # Расшифровка
-def uncrypt_afina_recurr(n_mod_arg: int, alpha_list_arg: list, beta_list_arg: list, yks_list_arg: list):
+def uncrypt_afina_recurr(n_mod_arg: int, alpha_list_arg: list, beta_list_arg: list, yks_list_arg: list) -> list:
     """Расшифровка полученного значения Аффинного рекуррентного шифра"""
-    print('\n\nРасшифровка. С помощью Расширенного алгоритма Евклида находим обратный элемент для каждой alpha. Затем '
-          'расшифровываем по формуле: alpha_i**-1 * (y_i - beta_i) mod mod_n')
+    # С помощью Расширенного алгоритма Евклида находим обратный элемент для каждой alpha.
+    # Затем расшифровываем по формуле: alpha_i**-1 * (y_i - beta_i) mod mod_n')
     reverse_elements_list: list = list()
-    for element in alpha_list:
-        reverse_element: int = rae(element, n_mod)
+    for element in alpha_list_arg:
+        reverse_element: int = rae(element, n_mod_arg)
         reverse_elements_list.append(reverse_element)
         # TODO: del
         # print(f'Результат вычисления РАЕ: {reverse_element}')
 
     # TODO: del
-    print(f'\nalpha_list {alpha_list}')
-    print(f'beta_list {beta_list}')
-    print(f'yks_list {yks_list}')
+    print(f'\nalpha_list {alpha_list_arg}')
+    print(f'beta_list {beta_list_arg}')
+    print(f'yks_list {yks_list_arg}')
     print(f'reverse_elements_list {reverse_elements_list}')
 
     # Формула расшифровки:
@@ -170,7 +148,63 @@ def uncrypt_afina_recurr(n_mod_arg: int, alpha_list_arg: list, beta_list_arg: li
     # 21 -> ф
 
     decrypt_letter: str = ''
-    for x in range(len(alpha_list)):
-        decrypt_letter = reverse_elements_list[x] * (yks_list[x] - beta_list[x]) % n_mod
-        # print(decrypt_letter)
-        print(rus_digit_letter[decrypt_letter])
+    decrypt_list: list = list()
+    for x in range(len(alpha_list_arg)):
+        decrypt_letter = reverse_elements_list[x] * (yks_list_arg[x] - beta_list_arg[x]) % n_mod_arg
+        decrypt_list.append(rus_digit_letter[decrypt_letter])
+
+    return decrypt_list
+
+
+# выбор для пользователя
+input_user: str = input(f'\nЧто необходимо сделать?\n1. Зашифровать.\n2. Расшифровать.\nСделайте выбор: ')
+# вызываем функцию тут, а не в выборе пользователя, т. к. нам нужен список y-ков (yks_list_from_func) для расшифровки
+crypto_phrase, yks_list_from_func = crypt_afina_recurr(n_mod, alpha_first_key, alpha_second_key, beta_first_key, beta_second_key)
+
+if input_user == '1':
+    print(crypto_phrase)
+    print('\nЗашифрованная фраза/слово: ')
+    print(''.join(crypto_phrase))
+elif input_user == '2':
+    pass
+    # uncrypted_word: list = uncrypt_afina_recurr(n_mod, alpha_list, beta_list, yks_list_from_func)
+    # print('\nРасшифрованная фраза/слово: ')
+    # print(''.join(uncrypted_word))
+else:
+    simple_exit()
+
+
+
+# Расшифровка
+print('\n\nРасшифровка. С помощью Расширенного алгоритма Евклида находим обратный элемент для каждой alpha. Затем '
+      'расшифровываем по формуле: alpha_i**-1 * (y_i - beta_i) mod mod_n')
+reverse_elements_list: list = list()
+for element in alpha_list:
+    reverse_element: int = rae(element, n_mod)
+    reverse_elements_list.append(reverse_element)
+    # TODO: del
+    # print(f'Результат вычисления РАЕ: {reverse_element}')
+
+
+
+# TODO: del
+print(f'\nalpha_list {alpha_list}')
+print(f'beta_list {beta_list}')
+print(f'yks_list {yks_list_from_func}')
+print(f'reverse_elements_list {reverse_elements_list}')
+
+# Формула расшифровки:
+# alpha_i**-1(reverse_elements) * (y_i - beta_i) mod mod_n
+# для первых двух
+# 19 * (28 - 14) % 33
+# 2 -> в
+# 20 * (15 - 9) % 33
+# 21 -> ф
+
+decrypt_letter: str = ''
+for x in range(len(alpha_list)):
+    decrypt_letter = reverse_elements_list[x] * (yks_list_from_func[x] - beta_list[x]) % n_mod
+    # print(decrypt_letter)
+    print(rus_digit_letter[decrypt_letter])
+
+# TODO: del  вфеврале   ыоатяфыв
