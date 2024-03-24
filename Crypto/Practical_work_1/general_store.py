@@ -90,6 +90,3 @@ def rae(alpha: int, mod_n: int) -> int:
         print('Иной результат')
 
     return y
-
-
-# Афинный рекуррентный шифр
