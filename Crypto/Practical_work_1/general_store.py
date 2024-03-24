@@ -19,7 +19,7 @@ eng_alphabet_spec: list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'
 
 # ф-ия выхода
 def simple_exit():
-    print('\nВведены предосудительные символы!\nПожалуйста, запустите программу заново и выполните корректный ввод!')
+    print('\nВведены некорректные данные!\nПожалуйста, запустите программу заново и выполните корректный ввод!')
     sleep(2)
     exit()
 
@@ -39,8 +39,44 @@ def checkin_input_word(symbols: str) -> bool:
     return True
 
 
-# Афинный шифр
+# Аффинный шифр и Аффинный рекуррентный шифр
 arabian_digits: list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+
+
+def find_delitels(input_num: int) -> list:
+    """Находим делители для проверки ключей alpha"""
+    temp_div_list: list = list()
+    print(f'Делители числа {input_num}:')
+    for elem in range(1, input_num + 1):
+        if input_num % elem == 0:
+            temp_div_list.append(elem)
+    return temp_div_list
+
+
+def is_vzaimno_prostoe(n_num, alpha):
+    """Проверяем, являются ли числа взаимно простыми"""
+    while alpha:
+        n_num, alpha = alpha, n_num % alpha
+    return n_num
+
+
+def checking_beta_key() -> int:
+    """Вввод и проверка ключа beta"""
+    beta = input('\nВведите ключ beta, для русского алфавита это число от 0 до 32: ')
+    try:
+        beta = int(beta)
+    except Exception as err:
+        print(f'Не удалось привести к int введённые данные, это число? Сообщение: {err}')
+        simple_exit()
+
+    print('Проверяем введённый ключ...')
+    if 0 <= beta <= 32:
+        print('Ключ beta корректный!')
+    else:
+        print('Ключ вне указанного диапазона!')
+        simple_exit()
+    return beta
+
 
 
 def rae(alpha: int, mod_n: int) -> int:

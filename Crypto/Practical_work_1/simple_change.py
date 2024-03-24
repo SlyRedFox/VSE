@@ -2,6 +2,7 @@
 from general_store import true_alphabet
 from general_store import crypto_alphabet
 from general_store import checkin_input_word
+from general_store import simple_exit
 
 
 def crypto_func(just_word: str) -> str:
@@ -29,7 +30,7 @@ crypto_true_letters: dict = dict(zip(crypto_alphabet, true_alphabet))
 our_word: str = input('Здравствуй, %username%! \nПожалуйста, введи слово для «Шифра простой замены» (только кириллица).'
                       'Спасибо! \nP.S.: есть базовая проверка ввода: ')
 
-# проверка корректности данных
+# проверка введённых данных
 checkin_input_word(our_word)
 
 input_user: str = input(f'\nЧто необходимо сделать со данными?\n1. Зашифровать.\n2. Расшифровать.\nСделайте выбор: ')
@@ -38,4 +39,4 @@ if input_user == '1':
 elif input_user == '2':
     print(uncrypt_func(our_word))
 else:
-    print('\nВведены некорректные данные! Запустите программу заново.')
+    simple_exit()
