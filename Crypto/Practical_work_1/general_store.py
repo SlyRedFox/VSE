@@ -72,11 +72,31 @@ rus_lettet_digit: dict = dict(zip(true_alphabet, arabian_digits))
 rus_digit_letter: dict = dict(zip(arabian_digits, true_alphabet))
 
 
-def checking_beta_key() -> int:
+def get_check_alpha_key(n_mod_arg: int) -> int:
+    """Вввод и проверка ключа alpha"""
+    checking_flag: bool = True
+    while checking_flag:
+        try:
+            alpha = int(input(f'Введите ключ alpha.\nТолько взаимно простые элементы с числом {n_mod_arg}: '))
+        except Exception as err:
+            print(f'Не удалось привести к int введённые данные, это число? Сообщение: {err}')
+            simple_exit()
+
+        print('Проверяем введённый ключ alpha...')
+        if is_vzaimno_prostoe(n_mod_arg, alpha) == 1:
+            checking_flag = False
+            print(f'Числа {n_mod_arg} и {alpha} взаимно простые.')
+        else:
+            print(f'Числа {n_mod_arg} и {alpha} НЕ взаимно простые, введите иной ключ alpha!')
+            continue
+    return alpha
+
+
+def get_check_beta_key() -> int:
     """Вввод и проверка ключа beta"""
     check_flag: bool = True
     while check_flag:
-        beta = input('\nВведите ключ beta, для русского алфавита это число от 0 до 32: ')
+        beta = input('Введите ключ beta, для русского алфавита это число от 0 до 32: ')
         try:
             beta = int(beta)
         except Exception as err:
