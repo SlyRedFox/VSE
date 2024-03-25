@@ -116,6 +116,11 @@ def crypt_afina_recurr(n_mod_arg: int, alpha_first_key: int, alpha_second_key: i
 
         # TODO: del
         num += 1
+
+     # TODO: del
+    print(f'\nalpha_list {alpha_list}')
+    print(f'yks_list {yks_list}')
+    print(f'beta_list {beta_list}')
     # print('\nЗашифрованная фраза:')  # TODO: del ['ы', 'о', 'а', 'т', 'я', 'ф', 'ы', 'в']
     # print(crypto_symbols)
     return crypto_symbols
@@ -124,74 +129,49 @@ def crypt_afina_recurr(n_mod_arg: int, alpha_first_key: int, alpha_second_key: i
 
 
 # Расшифровка
-def uncrypt_afina_recurr(n_mod_arg: int, alpha_list_arg: list, beta_list_arg: list) -> list:
+def uncrypt_afina_recurr(n_mod_arg: int, alpha_list_arg: list, beta_list_arg: list, alpha_first_key_arg: int, alpha_second_key_arg: int, beta_first_key_arg: int, beta_second_key_arg: int) -> list:
     """Расшифровка полученного значения Аффинного рекуррентного шифра"""
-
-    # TODO: yks list start
     # Находим список y-ов по ф-ле из раздела "Зашифрование":
-    # сохраняем все y-ки в список
+    # сохраняем все y-ки в список: это номера наших зашифрованных букв
     yks_list: list = list()
-
-    # Формула для у1:
     print('\nПеревод элементов слова для расшифрования в арабские цифры.')
-    numbers_of_letters: list = []
     for letter in our_word.lower():
-        numbers_of_letters.append(rus_lettet_digit[letter])
+        yks_list.append(rus_lettet_digit[letter])
 
-    # TODO: del
-    print(f'our_word {our_word}')
-    print(f'numbers_of_letters {numbers_of_letters}')
-    print()
+    # находим ключи альфа и бета для расшифровки: начинаем с 3 элемента, т. к. по два ключа у нас уже есть
+    for digit in yks_list[2:]:
 
+        # TODO: del
+        print('TESTING PYLAT!!!!!!!!!!!!!!!!!!!!!!')
+        print(f'alpha_first_key_arg {alpha_first_key_arg}')
+        print(f'alpha_second_key_arg {alpha_second_key_arg}')
 
-    # у1 = (alpha_first_key * x1 + beta_first_key) mod n_mod
-    # crypto_symbols: list = list()
-    y1 = (alpha_first_key * numbers_of_letters[0] + beta_first_key) % n_mod_arg
-    # crypto_symbols.append(rus_digit_letter[y1])
-    yks_list.append(y1)
-
-    # Формула для y2:
-    # y2 = (alpha_second_key * x2 + beta_second_key) mod n_mod
-    y2 = (alpha_second_key * numbers_of_letters[1] + beta_second_key) % n_mod_arg
-    # crypto_symbols.append(rus_digit_letter[y2])
-    yks_list.append(y2)
-
-    # Формула для последующих yi: произведение двух предыдущих alpha и сумма двух предыдущих beta (оба по n_mod)
-    # уi = ((((alpha_first_key * alpha_second_key) mod n_mod) * x3) + ((beta_first_key + beta_second_key) mod n_mod)) mod n_mod
-    # берём наш список с третьего элемента (т. к. первые два были для y1 и y2)
-    # TODO: del
-    num = 1
-    for digit in numbers_of_letters[2:]:
-        alpha_next = (alpha_first_key * alpha_second_key) % n_mod_arg
+        alpha_next = (alpha_first_key_arg * alpha_second_key_arg) % n_mod_arg
         # добавляем значение в список альф
         alpha_list.append(alpha_next)
 
-        beta_next = (beta_first_key + beta_second_key) % n_mod_arg
+        beta_next = (beta_first_key_arg + beta_second_key_arg) % n_mod_arg
         # добавляем значение в список бет
         beta_list.append(beta_next)
 
-        # TODO: del
-        print(f'\nTEST {num}')
-        print(f'alpha_next: {alpha_next}')
-        print(f'beta_next: {beta_next}')
 
-        yi = (alpha_next * digit + beta_next) % n_mod_arg
-        # crypto_symbols.append(rus_digit_letter[yi])
-        yks_list.append(yi)
+
+
+        # alpha_next = (alpha_first_key * alpha_second_key) % n_mod_arg
+        # # добавляем значение в список альф
+        # alpha_list.append(alpha_next)
+        #
+        # beta_next = (beta_first_key + beta_second_key) % n_mod_arg
+        # # добавляем значение в список бет
+        # beta_list.append(beta_next)
 
         # создаём новые значения alpha и beta для текущего цикла на основе предыдущих значений
-        alpha_first_key = alpha_second_key
-        alpha_second_key = alpha_next
+        alpha_first_key_arg = alpha_second_key_arg
+        alpha_second_key_arg = alpha_next
 
-        beta_first_key = beta_second_key
-        beta_second_key = beta_next
+        beta_first_key_arg = beta_second_key_arg
+        beta_second_key_arg = beta_next
 
-
-
-
-        # TODO: del
-        num += 1
-    # TODO end yks
 
     # С помощью Расширенного алгоритма Евклида находим обратный элемент для каждой alpha.
     # Затем расшифровываем по формуле: alpha_i**-1 * (y_i - beta_i) mod mod_n')
@@ -201,12 +181,11 @@ def uncrypt_afina_recurr(n_mod_arg: int, alpha_list_arg: list, beta_list_arg: li
         reverse_elements_list.append(reverse_element)
 
 
-
     # TODO: del
     print(f'\nalpha_list {alpha_list_arg}')
-    print(f'beta_list {beta_list_arg}')
-    print(f'yks_list {yks_list}')
     print(f'reverse_elements_list {reverse_elements_list}')
+    print(f'yks_list {yks_list}')
+    print(f'beta_list {beta_list_arg}')
 
     # Формула расшифровки:
     # alpha_i**-1(reverse_elements) * (y_i - beta_i) mod mod_n
@@ -215,8 +194,8 @@ def uncrypt_afina_recurr(n_mod_arg: int, alpha_list_arg: list, beta_list_arg: li
     # 2 -> в
     # 20 * (15 - 9) % 33
     # 21 -> ф
+    # 32 * (0 - 14) % 33
 
-    decrypt_letter: str = ''
     decrypt_list: list = list()
     for x in range(len(alpha_list_arg)):
         decrypt_letter = reverse_elements_list[x] * (yks_list[x] - beta_list_arg[x]) % n_mod_arg
@@ -237,7 +216,7 @@ if input_user == '1':
     print(''.join(crypto_phrase))
 elif input_user == '2':
     # pass
-    uncrypted_word: list = uncrypt_afina_recurr(n_mod, alpha_list, beta_list)
+    uncrypted_word: list = uncrypt_afina_recurr(n_mod, alpha_list, beta_list, alpha_first_key, alpha_second_key, beta_first_key, beta_second_key)
     print('\nРасшифрованная фраза/слово: ')
     print(''.join(uncrypted_word))
 else:
@@ -245,6 +224,7 @@ else:
 
 # 7  5  14  9
 # TODO: del  вфеврале   ыоатяфыв
+# хиатяфыв платяфыв  йъатяфыв дгатяфыв юоатяфыв шиатяфыв тлатяфыв  мъатяфыв  жгатяфыв боатяфыв  ыиатяфыв
 
 # https://www.bibliofond.ru/view.aspx?id=897442
 
