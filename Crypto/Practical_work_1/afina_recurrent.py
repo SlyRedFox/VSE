@@ -1,7 +1,7 @@
 # Аффинный рекуррентный шифр
 # Базовое слово: вфеврале, значения ключей: альфа1 = 7, альфа2 = 5; бета1 = 14, бета2 = 9
 from general_store import arabian_digits
-from general_store import checkin_input_word
+from general_store import checking_input_word
 from general_store import true_alphabet
 from general_store import get_check_beta_key
 from general_store import get_check_alpha_key
@@ -22,7 +22,7 @@ our_word: str = input('\nЗдравствуйте, %username%! \nПожалуй�
                       ' «Аффинного рекуррентныого шифра» (только кириллица). Спасибо! \nP.S.: есть проверка ввода: ')
 
 # проверка введённых данных
-checkin_input_word(our_word)
+checking_input_word(our_word)
 
 print('\nВвод и проверка ПЕРВОГО ключа alpha.')
 alpha_first_key: int = get_check_alpha_key(n_mod)

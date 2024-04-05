@@ -24,7 +24,7 @@ def simple_exit():
     exit()
 
 
-def checkin_input_word(symbols: str) -> bool:
+def checking_input_word(symbols: str) -> bool:
     """Проверка введённых %username% данных"""
     print('\nПроверочная фаза, пожалуйста, подождите...')
     sleep(1)
