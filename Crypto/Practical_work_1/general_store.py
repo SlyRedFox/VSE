@@ -122,12 +122,17 @@ def crypt_func(original_word: str, alpha_arg: int, beta_arg: int, n_mod_arg: int
     for letter in original_word.lower():
         numbers_of_letters.append(rus_lettet_digit[letter])
 
+    # TODO: del
+    print(f'numbers_of_letters {numbers_of_letters}')
+
     # находим список y-ов по ф-ле из раздела "Зашифрование" уi = (alpha * xi + beta) mod n_mod
     # # В базовом случае: x1 = (7 * 2 + 14) % 33
     crypto_symbols: list = list()
     for digit in numbers_of_letters:
         temp_y = (alpha_arg * digit + beta_arg) % n_mod_arg
         crypto_symbols.append(rus_digit_letter[temp_y])
+    # TODO: del
+    print(f'crypto_symbols {crypto_symbols}')
     return crypto_symbols
 
 
@@ -136,18 +141,24 @@ def uncrypt_func(original_crypted_word: str, alpha_arg: int, beta_arg: int, n_mo
     # Проверяем элементы зашифрованной фразы по ф-ле из раздела "Расшифрование" xi = alpha**-1 * (yi - beta) mod n_mod
     # с помощью Расширенного алгоритма Евклида найдём обратный элемент
     reverse_element: int = rae(alpha_arg, n_mod_arg)
+    # TODO: del
+    print(f'reverse_element_RAE {reverse_element}')
 
     # находим цифры букв
     elements_check: list = list()
     for elem in original_crypted_word:
         temp_x = reverse_element * (rus_lettet_digit[elem] - beta_arg) % n_mod_arg
         elements_check.append(temp_x)
+    # TODO: del
+    print(f'elements_check_digits_of_letters {elements_check}')
 
     # восстанавливаем слово
     uncrypted_list: list = list()
     for elem in elements_check:
         temp_letter = rus_digit_letter[elem]
         uncrypted_list.append(temp_letter)
+    # TODO: del
+    print(f'uncrypted_list_ressurected_word {uncrypted_list}')
     return uncrypted_list
 
 
@@ -176,6 +187,9 @@ def crypt_afina_recurr(n_mod_arg: int, our_word_arg: str, alpha_list_arg: list, 
     numbers_of_letters: list = []
     for letter in our_word_arg.lower():
         numbers_of_letters.append(rus_lettet_digit[letter])
+
+    # TODO: del
+    print(f'numbers_of_letters {numbers_of_letters}')
 
     # Находим список y-ов по ф-ле из раздела "Зашифрование":
     # сохраняем все y-ки в список
@@ -216,18 +230,26 @@ def crypt_afina_recurr(n_mod_arg: int, our_word_arg: str, alpha_list_arg: list, 
 
         beta_first_key_arg = beta_second_key_arg
         beta_second_key_arg = beta_next
+
+    # TODO: del
+    print(f'yks_list {yks_list}')
+
+    # TODO: del
+    print(f'crypto_symbols {crypto_symbols}')
     return crypto_symbols
 
 
 # Расшифровка
 def uncrypt_afina_recurr(n_mod_arg: int, our_word_arg: str, alpha_list_arg: list, beta_list_arg: list, alpha_first_key_arg: int, alpha_second_key_arg: int, beta_first_key_arg: int, beta_second_key_arg: int) -> list:
     """Расшифровка полученного значения Аффинного рекуррентного шифра"""
-    # Находим список y-ов по ф-ле из раздела "Зашифрование":
     # сохраняем все y-ки в список: это номера наших зашифрованных букв
     yks_list: list = list()
     # перевод элементов слова для шифрования в арабские цифры
     for letter in our_word_arg.lower():
         yks_list.append(rus_lettet_digit[letter])
+
+    # TODO: del
+    print(f'yks_list {yks_list}')
 
     # находим ключи альфа и бета для расшифровки: начинаем с 3 элемента списка (любого), т. к. по два ключа уже есть
     for x in yks_list[2:]:
@@ -246,18 +268,30 @@ def uncrypt_afina_recurr(n_mod_arg: int, our_word_arg: str, alpha_list_arg: list
         beta_first_key_arg = beta_second_key_arg
         beta_second_key_arg = beta_next
 
+    # TODO: del
+    print(f'alpha_list_arg {alpha_list_arg}')
+
+    # TODO: del
+    print(f'beta_list_arg {beta_list_arg}')
+
 
     # С помощью Расширенного алгоритма Евклида находим обратный элемент для каждой alpha.
-    # Расшифровываем по формуле: alpha_i**-1 * (y_i - beta_i) mod mod_n')
+    # Расшифровываем по формуле: alpha_i**-1 * (y_i - beta_i) mod mod_n
     reverse_elements_list: list = list()
     for element in alpha_list_arg:
         reverse_element: int = rae(element, n_mod_arg)
         reverse_elements_list.append(reverse_element)
 
+    # TODO: del
+    print(f'reverse_elements_list_rae_for_alpha {reverse_elements_list}')
+
     decrypt_list: list = list()
     for x in range(len(alpha_list_arg)):
         decrypt_letter = reverse_elements_list[x] * (yks_list[x] - beta_list_arg[x]) % n_mod_arg
         decrypt_list.append(rus_digit_letter[decrypt_letter])
+
+    # TODO: del
+    print(f'decrypt_list {decrypt_list}')
     return decrypt_list
 
 
