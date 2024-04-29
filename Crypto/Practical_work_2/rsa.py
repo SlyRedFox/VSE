@@ -164,39 +164,113 @@ print(f'Длина блока по формуле log2(число) равна: {
 # в нашем базовом случае длина блока равна 12 бит, берём их с конца, т.к. начало в случае
 # необходимости можно дополнить незначащими нулями, а если добавим их в конец - это уже будет другое значение).
 print(f'\nБерём данные бинарного кода {final_binary_code}, считаем с конца {binary_log} бит.')
-# берём значения с конца, поэтому из 12 делаем -12 вот так: [(binary_log*-1):]
-otrezok_example: str = final_binary_code[(binary_log*-1):]
-print(f'Это первый блок m1. "Кусчочек" длиной в {binary_log} бит: {otrezok_example}')
 
-m1: int = int(otrezok_example, 2)
-print(f'Переводим этот "кусочек" в десятичное представление, m1 = {m1}')
+# нужно узнать длину для цикла, для этого берём длино бинарного лога и делим её на длину блока.
+# в базовом случае это будет 2, но нужно добавить +1, т.к. есть ещё "кусочек" блока короче 12, пример:
+len_cycle: int = (len(final_binary_code) // binary_log) + 1
+# TODO: del, длина для цикла
+print(f'\nДлина блока для цикла: {len_cycle}\n')
 
-print('Зашифруем этот блок по формуле: Ci = Mi**n (mod n)')
-c_i: int = m1**number_e % n
-print(f'Получается: Ci = {c_i}')
+# для базового примера:
+# 01100011011011110110010001100101 - основной блок
+# 010001100101 - первый блок
+# 011011110110 - второй блок
+# 01100011 - третий блок, который нужно дополнять нулями слева
+final_binary_code_int = int(final_binary_code, 2)
+result_list_binary: list = []
+for i in range(len_cycle):
+    if len(final_binary_code) > binary_log:
+        print('Длина позволяет') # TODO: del
+        result_list_binary.append(final_binary_code[(binary_log*-1):])
+        final_binary_code = final_binary_code[:(binary_log*-1)]
+    else:
+        print('Длина не позволяет') # TODO: del ВОЗМОЖНО, ТУТ НУЖНО ДОПОЛНЯТЬ НУЛЯМИ!!!
+        print(f'Сейчас имеем значение: {final_binary_code}')
+        result_list_binary.append(final_binary_code)
 
-# когда работаем с ШифроТекстом необходимо, чтобы все его блоки имели одинаковую длину: log2(n) + 1
-print('\nНаходим длину блока для ШифроТекса. По формуле двоичный логарифм с округлением вниз от n + 1: math.floor(math.log2(n)) + 1')
-# в случае необходимости дополняем незначащими нулями слева zfill(binary_log+1
-binary_code_ci: str = bin(c_i)[2:].zfill(binary_log+1)
-print(f'Переводим результат в двоичное представление. Это наш ШифроТекст: {binary_code_ci}')
+print(f'Результат после цикла в списке: {result_list_binary}')
 
 
+# # берём значения с конца, поэтому из 12 делаем -12 вот так: [(binary_log*-1):]
+# otrezok_example: str = final_binary_code[(binary_log*-1):]
+# print(f'Это первый блок m1. "Кусочек" длиной в {binary_log} бит: {otrezok_example}')
+#
+# m1: int = int(otrezok_example, 2)
 
-# Расшифрование
-# Шаг 1, берём нашу бинарную последовательность c1, c2... cn и переводим в десятичное представление
-ci_decrypted_dec: int = int(binary_code_ci, 2)
-print(f'Десятичное представление символа: {ci_decrypted_dec}')
+print(f'Переводим каждый элемент полученного списка в десятичное представление.')
+result_list_dec: list = []
+for element in result_list_binary:
+    result_list_dec.append(int(element, 2))
+print(f'Десятичный вид после цикла в списке: {result_list_dec}')
+
+
+print('\nЗашифровываем блоки по формуле: Ci = Mi**n (mod n)')
+crypted_message: list = list()
+for element in result_list_dec:
+    crypted_message.append(element**number_e % n)
+print(f'Зашифрованное сообщение в десятичном виде: {crypted_message}')
+
+# в ШифроТексте необходимо, чтобы все его блоки имели одинаковую длину: log2(n) + 1
+# # в случае необходимости дополняем незначащими нулями слева zfill(binary_log+1
+print('Переводим его в двоичный вид.')
+crypted_message_bin: list = list()
+for element in crypted_message:
+    crypted_message_bin.append(bin(element)[2:].zfill(binary_log+1))
+print(f'Результат в двоичном представление. Это наш ШифроТекст: {crypted_message_bin}')
+
+
+# # Расшифровка
+print('\nРасшифровка.')
+# # Шаг 1, берём бинарную последовательность c1, c2... cn и переводим в десятичное представление
+crypted_message_dec: list = list()
+for element in crypted_message_bin:
+    crypted_message_dec.append(int(element, 2))
+print(f'Результат в десятичном виде: {crypted_message_dec}')
+
+# ci_decrypted_dec: int = int(binary_code_ci, 2)
+# print(f'Десятичное представление символа: {ci_decrypted_dec}')
+
+
 
 # Шаг 2, вычисляем значение символа по формуле: Mi = Ci**d (mod n).
-# В нашем случае: Mi = 3061**6397 (mod n)
-ci_symbol_dec: int = c_i**d % n
-print(f'Полученное десятичное представление символа: {ci_symbol_dec}')
+# # В нашем случае: Mi = 3061**6397 (mod n) TODO: del
+print('\nВычисляем значение символа по формуле: Mi = Ci**d (mod n).')
+uncrypted_message_dec: list = list()
+for element in crypted_message_dec:
+    uncrypted_message_dec.append(element**d % n)
+print(f'Получено десятичное представление символа: {uncrypted_message_dec}')
 
-binary_code_symbol: str = bin(ci_symbol_dec)[2:]
-print(f'Переводим десятичное представление символа в двоичное: {binary_code_symbol}')
+
+# ci_symbol_dec: int = c_i**d % n
+# print(f'Полученное десятичное представление символа: {ci_symbol_dec}')
+
+print('Переводим в двоичный вид.')
+binary_code_uncrypted: list = list()
+for element in uncrypted_message_dec:
+    binary_code_uncrypted.append(bin(element)[2:].zfill(binary_log))
+print(f'Расшифрованное сообщение в двоичном виде: {binary_code_uncrypted}')
+
+# реверсируем полученный список
+binary_code_uncrypted_reverse: list = binary_code_uncrypted[::-1]
+print(f'Расшифрованное сообщение в двоичном виде: {binary_code_uncrypted_reverse}')
 
 
+binary_final_string: str = ''.join(binary_code_uncrypted_reverse)
+print(f'Получаем строку с зашифрованным сообщением, двоичное представление: {binary_final_string}')
 
-print(f'Находим совпадение в ASCII таблице: ')
+print('Разделяем полученные данные на блоки по 8 бит и находим совпадения в ASCII таблице.')
+# в базовом варианте финал-строка выглядит так: 000001100011011011110110010001100101
+# если смотреть с конца, то вы чётко выделяем четыре блока по 8 бит, а четыре ноля в начале будут "лишние":
+# 0000 01100011 01101111 01100100 01100101
+# поэтому мы просто целочисленно делим строку на блоки по 8 бит и сравниваем каждый блок с ASCII таблицей
+bit_length: int = 8
+len_final_cycle: int = (len(binary_final_string) // bit_length)
+final_list: list = list()
+for i in range(len_final_cycle):
+    final_list.append(binary_final_string[(bit_length * -1):])
+    binary_final_string = binary_final_string[:(bit_length * -1)]
+final_reverse_list = final_list[::-1]
+print(final_reverse_list)
 
+for element in final_reverse_list:
+    print(chr(int(element, 2)), end='')
