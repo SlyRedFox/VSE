@@ -3,16 +3,8 @@ import math
 from random import randrange
 
 
-# def is_simple_number(number: int) -> bool:
-#     """Проверка, является ли число простым"""
-#     if number <= 1:
-#         return False
-#     for i in range(2, int(number ** 0.5) + 1):
-#         if number % i == 0:
-#             return False
-#     return True
-
 def is_simple_number(number: int, k=10):
+    """"Проверка, является ли число простым"""
     if number <= 1:
         return False
     elif number <= 3:
@@ -20,7 +12,7 @@ def is_simple_number(number: int, k=10):
     elif number % 2 == 0:
         return False
 
-    # малая теорем Ферма
+    # малая теорема Ферма
     for iteration in range(k):
         result = randrange(2, number - 1)
         if pow(result, number - 1, number) != 1:
@@ -119,7 +111,6 @@ def encrypt_message(n, message: str, num_e: int) -> list:
     # Вычисляем длину блока - именно для Открытого Текста! - по формуле: log2(number)
     # Логарифм двоичный n: log2(n) с округлением вниз: math.floor().
     binary_log: int = math.floor(math.log2(n))
-    # binary_log: int = 12 TODO: del
     print(f'Длина блока по формуле log2(число) равна: {binary_log}')
 
     # в нашем базовом случае длина блока равна 12 бит, берём их с конца, т.к. начало в случае
@@ -137,7 +128,6 @@ def encrypt_message(n, message: str, num_e: int) -> list:
     # 011011110110 - второй блок
     # 01100011 - третий блок, который можно дополнять нулями слева
     # берём значения с конца, поэтому из 12 делаем -12 вот так: [(binary_log*-1):]
-    final_binary_code_int = int(final_binary_code, 2)
     result_list_binary: list = []
     for i in range(len_cycle):
         if len(final_binary_code) > binary_log:
@@ -163,9 +153,9 @@ def encrypt_message(n, message: str, num_e: int) -> list:
 
     # в ШифроТексте необходимо, чтобы все его блоки имели одинаковую длину: log2(n) + 1
     # # в случае необходимости дополняем незначащими нулями слева zfill(binary_log+1
-    # переводим в двоичный вид
     crypted_message_bin: list = list()
     for element in crypted_message:
+        # переводим в двоичный вид
         crypted_message_bin.append(bin(element)[2:].zfill(binary_log + 1))
     print(f'Результат в двоичном представление, наш ШифроТекст: {crypted_message_bin}')
     return crypted_message_bin
@@ -196,14 +186,14 @@ def decrypt_message(n, crypted_message: list, num_d: int) -> None:
         uncrypted_message_dec.append(pow_mod_for_mi(element, num_d, n))
     print(f'Получено десятичное представление символа: {uncrypted_message_dec}')
 
-    # переводим в двоичный вид
     binary_log: int = math.floor(math.log2(n))
     print(f'Длина блока по формуле log2(число) равна: {binary_log}')
 
     binary_code_uncrypted: list = list()
     for element in uncrypted_message_dec:
         # binary_code_uncrypted.append(bin(element)[2:])
-        binary_code_uncrypted.append(bin(element)[2:].zfill(binary_log)) #TODO: del длина блока только для Открытого Текста
+        # переводим в двоичный вид
+        binary_code_uncrypted.append(bin(element)[2:].zfill(binary_log))
 
     # реверсируем полученный список
     binary_code_uncrypted_reverse: list = binary_code_uncrypted[::-1]
@@ -226,13 +216,13 @@ def decrypt_message(n, crypted_message: list, num_d: int) -> None:
     # переворачиваем список
     final_reverse_list = final_list[::-1]
 
-    # убираем [00000000] в начале данных, т.к. это незначимый символ
-    if final_reverse_list[0] == '00000000':
-        final_reverse_list.pop(0)
     print(f'Финальные данные для расшифровки в двоичном виде:{final_reverse_list}')
 
-    print('Исходный текст: ')
+    print('\nИсходный текст: ')
     for element in final_reverse_list:
+        # убираем [00000000] в начале данных, это незначимые символы
+        if element == '00000000':
+            continue
         print(chr(int(element, 2)), end='')
 
 
@@ -240,4 +230,4 @@ def simple_exit():
     """Выход из программы"""
     print('\nВведены некорректные данные!\nПерезаапустите программу и выполните корректный ввод!')
     sleep(2)
-    simple_exit()
+    exit()
