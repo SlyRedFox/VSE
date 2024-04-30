@@ -1,13 +1,29 @@
 from time import sleep
 import math
+from random import randrange
 
 
-def is_simple_number(number: int) -> bool:
-    """Проверка, является ли число простым"""
+# def is_simple_number(number: int) -> bool:
+#     """Проверка, является ли число простым"""
+#     if number <= 1:
+#         return False
+#     for i in range(2, int(number ** 0.5) + 1):
+#         if number % i == 0:
+#             return False
+#     return True
+
+def is_simple_number(number: int, k=10):
     if number <= 1:
         return False
-    for i in range(2, int(number ** 0.5) + 1):
-        if number % i == 0:
+    elif number <= 3:
+        return True
+    elif number % 2 == 0:
+        return False
+
+    # малая теорем Ферма
+    for iteration in range(k):
+        result = randrange(2, number - 1)
+        if pow(result, number - 1, number) != 1:
             return False
     return True
 
@@ -24,10 +40,10 @@ def get_check_e(ayler_function: int) -> int:
     checking_flag: bool = True
     while checking_flag:
         try:
-            e_number = int(input(f'\nВведите число e.\nТолько взаимно простое с числом {ayler_function}: '))
+            e_number = int(input(f'\nВведите число e.\nТолько взаимно простое с числом: {ayler_function} \nВаш ввод: '))
         except Exception as err:
             print(f'Не удалось привести к int введённые данные, это число? Сообщение: {err}')
-            exit()
+            simple_exit()
 
         print('Проверяем число e.')
         if is_vzaimno_prostoe(ayler_function, e_number) == 1:
@@ -103,6 +119,7 @@ def encrypt_message(n, message: str, num_e: int) -> list:
     # Вычисляем длину блока - именно для Открытого Текста! - по формуле: log2(number)
     # Логарифм двоичный n: log2(n) с округлением вниз: math.floor().
     binary_log: int = math.floor(math.log2(n))
+    # binary_log: int = 12 TODO: del
     print(f'Длина блока по формуле log2(число) равна: {binary_log}')
 
     # в нашем базовом случае длина блока равна 12 бит, берём их с конца, т.к. начало в случае
@@ -112,7 +129,6 @@ def encrypt_message(n, message: str, num_e: int) -> list:
     # нужно узнать длину для цикла, для этого берём длино бинарного лога и делим её на длину блока.
     # в базовом случае это будет 2, но нужно добавить +1, т.к. есть ещё "кусочек" блока короче 12, пример:
     len_cycle: int = (len(final_binary_code) // binary_log) + 1
-    # TODO: del, длина для цикла
     print(f'\nДлина блока для цикла: {len_cycle}\n')
 
     # для базового примера:
@@ -155,22 +171,29 @@ def encrypt_message(n, message: str, num_e: int) -> list:
     return crypted_message_bin
 
 
+def pow_mod_for_mi(elem, num_d, n):
+    """Возведение в степень по модулю, большие числа"""
+    result = pow(elem, num_d, n)
+    return result
+
+
 def decrypt_message(n, crypted_message: list, num_d: int) -> None:
     # Расшифровка
     # Шаг 1, берём бинарную последовательность c1, c2... cn и переводим в десятичное представление
     print('\nРасшифровка.')
     crypted_message_dec: list = list()
     for element in crypted_message:
-        print(element)
         crypted_message_dec.append(int(element, 2))
     print(f'Результат в десятичном виде: {crypted_message_dec}')
 
     # Шаг 2, вычисляем значение символа по формуле: Mi = Ci**d (mod n).
-    # В нашем случае: Mi = 3061**6397 (mod n) TODO: del
     print('\nВычисляем значение символа по формуле: Mi = Ci**d (mod n).')
     uncrypted_message_dec: list = list()
     for element in crypted_message_dec:
-        uncrypted_message_dec.append(element ** num_d % n)
+        print(element)
+        print(num_d)
+        print(n)
+        uncrypted_message_dec.append(pow_mod_for_mi(element, num_d, n))
     print(f'Получено десятичное представление символа: {uncrypted_message_dec}')
 
     # переводим в двоичный вид
@@ -179,7 +202,8 @@ def decrypt_message(n, crypted_message: list, num_d: int) -> None:
 
     binary_code_uncrypted: list = list()
     for element in uncrypted_message_dec:
-        binary_code_uncrypted.append(bin(element)[2:].zfill(binary_log))
+        binary_code_uncrypted.append(bin(element)[2:])
+        # binary_code_uncrypted.append(bin(element)[2:].zfill(binary_log)) #TODO: del длина блока только для Открытого Текста
     print(f'Расшифрованное сообщение в двоичном виде: {binary_code_uncrypted}')
 
     # реверсируем полученный список
@@ -217,4 +241,4 @@ def simple_exit():
     """Выход из программы"""
     print('\nВведены некорректные данные!\nПерезаапустите программу и выполните корректный ввод!')
     sleep(2)
-    exit()
+    simple_exit()
