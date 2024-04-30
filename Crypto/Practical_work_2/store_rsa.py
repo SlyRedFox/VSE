@@ -190,9 +190,9 @@ def decrypt_message(n, crypted_message: list, num_d: int) -> None:
     print('\nВычисляем значение символа по формуле: Mi = Ci**d (mod n).')
     uncrypted_message_dec: list = list()
     for element in crypted_message_dec:
-        print(element)
-        print(num_d)
-        print(n)
+        # print(element) TODO: del
+        # print(num_d)
+        # print(n)
         uncrypted_message_dec.append(pow_mod_for_mi(element, num_d, n))
     print(f'Получено десятичное представление символа: {uncrypted_message_dec}')
 
@@ -202,9 +202,8 @@ def decrypt_message(n, crypted_message: list, num_d: int) -> None:
 
     binary_code_uncrypted: list = list()
     for element in uncrypted_message_dec:
-        binary_code_uncrypted.append(bin(element)[2:])
-        # binary_code_uncrypted.append(bin(element)[2:].zfill(binary_log)) #TODO: del длина блока только для Открытого Текста
-    print(f'Расшифрованное сообщение в двоичном виде: {binary_code_uncrypted}')
+        # binary_code_uncrypted.append(bin(element)[2:])
+        binary_code_uncrypted.append(bin(element)[2:].zfill(binary_log)) #TODO: del длина блока только для Открытого Текста
 
     # реверсируем полученный список
     binary_code_uncrypted_reverse: list = binary_code_uncrypted[::-1]
@@ -230,7 +229,7 @@ def decrypt_message(n, crypted_message: list, num_d: int) -> None:
     # убираем [00000000] в начале данных, т.к. это незначимый символ
     if final_reverse_list[0] == '00000000':
         final_reverse_list.pop(0)
-    print(f'\nФинальные данные для расшифровки в двоичном виде:{final_reverse_list}')
+    print(f'Финальные данные для расшифровки в двоичном виде:{final_reverse_list}')
 
     print('Исходный текст: ')
     for element in final_reverse_list:
