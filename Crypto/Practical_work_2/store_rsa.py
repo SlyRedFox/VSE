@@ -155,12 +155,13 @@ def encrypt_message(n, message: str, num_e: int) -> list:
     return crypted_message_bin
 
 
-def decrypt_message(n, crypted_message: list, num_d: int) -> list:
+def decrypt_message(n, crypted_message: list, num_d: int) -> None:
     # Расшифровка
     # Шаг 1, берём бинарную последовательность c1, c2... cn и переводим в десятичное представление
     print('\nРасшифровка.')
     crypted_message_dec: list = list()
     for element in crypted_message:
+        print(element)
         crypted_message_dec.append(int(element, 2))
     print(f'Результат в десятичном виде: {crypted_message_dec}')
 

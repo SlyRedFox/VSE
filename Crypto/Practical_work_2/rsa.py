@@ -6,13 +6,8 @@ from store_rsa import decrypt_message
 from store_rsa import simple_exit
 
 
-print('Выгружаем текст из файла.')
 # TODO: del, это будет из файла
 # code_string: str = 'code'
-file_path = 'info.txt'
-with open(file_path, 'r', encoding='utf-8') as file:
-    code_string = file.read()
-
 
 # Генерация ключей, простые числа p и q, причём p - q = большое число.
 # Простое число - это натуральное число > 1, которое делится без остатка на 1 и на себя.
@@ -67,12 +62,23 @@ print(f'Итог по ключам. Открытый ключ: {open_key}. За�
 # Выбор пользователя: зашифровать или расшифровать
 input_user: str = input(f'\nЧто необходимо сделать?\n1. Зашифровать.\n2. Расшифровать.\nСделайте выбор: ')
 if input_user == '1':
+    print('Выгружаем текст из файла.')
+    file_path = 'encrypt.txt'
+    with open(file_path, 'r', encoding='utf-8') as file:
+        code_string = file.read()
     crypted_message_bin: list = encrypt_message(n, code_string, number_e)
-    print('\nЗашифрованная фраза/слово: ')
+    print('\nШифроТекст: ')
     print(''.join(crypted_message_bin))
+
 elif input_user == '2':
-    uncrypted_message = decrypt_message(n, code_string, d)
-    # print('\nРасшифрованная фраза/слово: ')
-    # print(''.join(uncrypted_word))
+    print('Выгружаем ШифроТекст из файла.')
+    file_path = 'decrypt.txt'
+    list_for_decrypt: list = []
+    with open(file_path, 'r') as file:
+        for line in file:
+            # Удаляем лишние кавычки и пробелы в списке
+            list_for_decrypt.extend(line.strip().replace("'", "").split(', '))
+    uncrypted_message = decrypt_message(n, list_for_decrypt, d)
+
 else:
     simple_exit()
