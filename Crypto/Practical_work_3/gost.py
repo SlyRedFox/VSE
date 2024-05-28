@@ -90,7 +90,7 @@ d_signature_key: int = 3
 x1: int = 4
 y1: int = 9
 
-print('\nРасчёт x3')
+print('\nРасчёт x3 (формула два)')
 x3_1: int = ((3*x1**2 + a)**2) % p
 x3_2: int = ((2*y1)**2) % p
 print(f'Видим результат вычисления 2P: {x3_1} / {x3_2} - {2*x1}')
@@ -117,7 +117,7 @@ print(f'Обновлённый результат вычисления 2P: {x3_r
 print(f'Результат вычислений: x3 = {x3_result}')
 
 
-print('\nРасчёт у3')
+print('\nРасчёт у3 (формула два)')
 y3_1: int = (3*x1**2 + a) % p
 y3_2: int = 2*y1 % p
 y3_3: int = (x1 - x3_result)
@@ -145,3 +145,59 @@ print(f'Итоговый результат для 2P: ({x3_result}, {y3_result}
 print(f'\n\nВычисляем 3P = 2P + P: 3P = ({x3_result}, {y3_result}) + ({x1}, {y1})')
 # точки разные, воспользуемся первой формулой расчёта точек эллиптической кривой
 
+print('\nРасчёт x3 (формула один)')
+x1_formula_one: int = x3_result
+y1_formula_one: int = y3_result
+
+x2_formula_one: int = x1
+y2_formula_one: int = y1
+print(f'Подготовленные данные: x1 = {x1_formula_one}, y1 = {y1_formula_one}, x2 = {x2_formula_one}, y2 = {y2_formula_one}')
+
+
+x3_formula_one: int = ((y2_formula_one - y1_formula_one)**2) % p
+x3_2_formula_one: int = ((x2_formula_one - x1_formula_one)**2) % p
+print(f'Промежуточный результат: {x3_formula_one} / {x3_2_formula_one} - {x1_formula_one} - {x2_formula_one}')
+
+
+#TODO: временные расчёты добавить в функцию
+# временный элемент для расчётов по формуле один, прибавляем модуль
+x_temp_elem_formula_one: int = x3_formula_one
+for elem in range(1000):
+    if (x_temp_elem_formula_one % x3_2_formula_one) == 0:
+        print(f'{x_temp_elem_formula_one} Делится нацело, результат: {x_temp_elem_formula_one % x3_2_formula_one}')
+        break
+    else:
+        # print(f'{temp_elem_for_x3} НЕ делится нацело. Прибавляем к числителю модуль {p}')
+        x_temp_elem_formula_one += p
+print(f'Результат: число, которое делится на цело после прибавления к числителю модуля: {x_temp_elem_formula_one}')
+
+x3_result_formula_one: int = (x_temp_elem_formula_one // x3_2_formula_one) - x1_formula_one - x2_formula_one
+print(f'Результат для формулы 1, x3 = {x3_result_formula_one}')
+
+
+
+
+
+
+
+print('\nРасчёт y3 (формула один)')
+y3_formula_one: int = (y2_formula_one - y1_formula_one)
+y3_2_formula_one: int = (x2_formula_one - x1_formula_one)
+y3_3_formula_one: int = (x1_formula_one - x3_result_formula_one)
+
+
+print(f'Данные для расчёта: {y3_formula_one} / {y3_2_formula_one} * {y3_3_formula_one} - {y1_formula_one}')
+
+# временный элемент для расчётов y_temp_elem_formula_one
+y_temp_elem_formula_one: int = y3_formula_one * y3_3_formula_one
+for elem in range(1000):
+    if (y_temp_elem_formula_one % y3_2_formula_one) == 0:
+        print(f'{y_temp_elem_formula_one} Делится нацело, результат: {y_temp_elem_formula_one % y3_2_formula_one}')
+        break
+    else:
+        # print(f'{for_raschet_y3} НЕ делится нацело. Прибавляем к числителю модуль {p}')
+        y_temp_elem_formula_one += p
+print(f'Результат: число, которое делится на цело после прибавления к числителю модуля: {y_temp_elem_formula_one}')
+
+y3_result: int = ((y_temp_elem_formula_one // y3_2_formula_one) - y1_formula_one) % p
+print(f'Результат вычислений: y3 = {y3_result}')
