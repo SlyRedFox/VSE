@@ -201,3 +201,55 @@ print(f'Результат: число, которое делится на це�
 
 y3_result: int = ((y_temp_elem_formula_one // y3_2_formula_one) - y1_formula_one) % p
 print(f'Результат вычислений: y3 = {y3_result}')
+
+
+
+
+
+
+# Алгоритм формирования подписи
+print('\n\n\nАлгоритм формирования подписи')
+
+# TODO: нам потребуется сообщение M - возьмём данные из rsa, там есть перевод текста в двоичный режим.
+# Тут сейчас используется тест-переменная:
+# 1
+print('Вычисляем хэш-код сообщения M по формуле: h = h(M)')
+m_message: str = '1011101110111'
+
+
+
+
+# данные для хэширования - начало
+import hashlib
+
+
+message: str = 'привет как дела?'
+
+# чистый хеш-код
+mess_byte = message.encode('utf-8')
+hash_obj = hashlib.sha256(mess_byte)
+hash_code = hash_obj.hexdigest()
+
+print(f'Хэш-код сообщения {message}: {hash_code}')
+
+
+# бинарный формат
+hash_code_binary = hashlib.sha256(message.encode()).digest()
+print(type(hash_code_binary))
+print(hash_code_binary)
+
+
+# в виде 0 и 1
+hash_code_zero_one = hashlib.sha256(message.encode()).hexdigest()
+binary_hash_code = ''.join(format(int(x, 16), '08b') for x in hash_code_zero_one)
+print(f'0-1: {binary_hash_code}')
+
+# hash_code_1 = 1302397928
+# final_message = ''
+# while hash_code_1 > 0:
+#     final_message = chr(hash_code_1 % 256) + final_message
+#     hash_code_1 = hash_code_1 // 256
+#
+# print(final_message)
+
+# данные для хэширования - окончание
