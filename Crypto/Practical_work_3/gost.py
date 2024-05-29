@@ -206,7 +206,6 @@ print(f'Результат вычислений: y3 = {y3_result}')
 
 
 
-
 # Алгоритм формирования подписи
 print('\n\n\nАлгоритм формирования подписи')
 
@@ -214,35 +213,33 @@ print('\n\n\nАлгоритм формирования подписи')
 # Тут сейчас используется тест-переменная:
 # 1
 print('Вычисляем хэш-код сообщения M по формуле: h = h(M)')
+# TODO: используем осмысленное слово или текст, данные ниже для практики
 m_message: str = '1011101110111'
 
-
-
-
-# данные для хэширования - начало
-import hashlib
-
-
-message: str = 'привет как дела?'
-
-# чистый хеш-код
-mess_byte = message.encode('utf-8')
-hash_obj = hashlib.sha256(mess_byte)
-hash_code = hash_obj.hexdigest()
-
-print(f'Хэш-код сообщения {message}: {hash_code}')
-
-
-# бинарный формат
-hash_code_binary = hashlib.sha256(message.encode()).digest()
-print(type(hash_code_binary))
-print(hash_code_binary)
-
-
-# в виде 0 и 1
-hash_code_zero_one = hashlib.sha256(message.encode()).hexdigest()
-binary_hash_code = ''.join(format(int(x, 16), '08b') for x in hash_code_zero_one)
-print(f'0-1: {binary_hash_code}')
+# # данные для хэширования - начало
+# import hashlib
+#
+#
+# message: str = 'привет как дела?'
+#
+# # чистый хеш-код
+# mess_byte = message.encode('utf-8')
+# hash_obj = hashlib.sha256(mess_byte)
+# hash_code = hash_obj.hexdigest()
+#
+# print(f'Хэш-код сообщения {message}: {hash_code}')
+#
+#
+# # бинарный формат
+# hash_code_binary = hashlib.sha256(message.encode()).digest()
+# print(type(hash_code_binary))
+# print(hash_code_binary)
+#
+#
+# # в виде 0 и 1
+# hash_code_zero_one = hashlib.sha256(message.encode()).hexdigest()
+# binary_hash_code = ''.join(format(int(x, 16), '08b') for x in hash_code_zero_one)
+# print(f'0-1: {binary_hash_code}')
 
 # hash_code_1 = 1302397928
 # final_message = ''
@@ -253,3 +250,49 @@ print(f'0-1: {binary_hash_code}')
 # print(final_message)
 
 # данные для хэширования - окончание
+
+
+
+# Выясняем, с каким размером подписи мы работаем в нашем примере. Для этого определяем битовую длину q
+q_length_bits: int = q.bit_length()
+# [2:] отсекаем через [2:] начало 0b
+q_binary = bin(q)[2:]
+print(f'Битовая длина q (число {q}) равна: {q_length_bits} бит(а), значение в двоичном виде: {q_binary}')
+print(f'Значит, для хеширования мы будем разделять нашу последовательность на блоки по {q_length_bits} бит(а).')
+print(f'Выполняем хеширование для этого разделяем последовательность {m_message} число на блоки по {q_length_bits} бит(а).')
+
+temp_list = []
+# создаём список элементов из сообщения длиной q бит
+for elem in range(len(m_message)):
+    temp_list.append(m_message[-3:])
+    m_message = m_message[:-3]
+
+# убираем "пустые" элементы ''
+temp_list = list(filter(bool, temp_list))
+# переворачиваем список
+temp_list = temp_list[::-1]
+print(f'Базовый список: {temp_list}')
+
+# дополняем нулями значения списка
+q_length_bits = 3 # TODO: del, дублиует значения
+
+# создаём список, у которого будет заполнение нулями в первом элементе
+null_list = temp_list
+for l_elem in temp_list:
+    if len(l_elem) < q_length_bits:
+        l_elem = ('0'*(q_length_bits-len(l_elem))) + l_elem
+        # print(f'New elem: {l_elem}')
+        null_list[0] = l_elem
+
+print(f'Итоговый список с заполненными нулями: {null_list}')
+
+sum_list_elements: int = 0
+for elem in null_list:
+    sum_list_elements += int(elem, 2)
+
+final_sum_list_elements = bin(sum_list_elements)[2:]
+print(f'Результат сложения "кусочков" хеша: {final_sum_list_elements}')
+q_bytes_peace = final_sum_list_elements[-q_length_bits:]
+print(f'Берём младшие {q_length_bits} бита результата в качестве подписи, результат: {q_bytes_peace}')
+print(f'Итог Шага 1 Алгоритма формирования подписи: h = h(M) = {q_bytes_peace}')
+
