@@ -1,6 +1,7 @@
 # Программная реализация ГОСТ 34.10-2012
 
 import math
+from store_gost import rae
 
 
 # Параметры схемы цифровой подписи
@@ -274,8 +275,6 @@ temp_list = temp_list[::-1]
 print(f'Базовый список: {temp_list}')
 
 # дополняем нулями значения списка
-q_length_bits = 3 # TODO: del, дублиует значения
-
 # создаём список, у которого будет заполнение нулями в первом элементе
 null_list = temp_list
 for l_elem in temp_list:
@@ -294,7 +293,7 @@ final_sum_list_elements = bin(sum_list_elements)[2:]
 print(f'Результат сложения "кусочков" хеша: {final_sum_list_elements}')
 q_bytes_peace = final_sum_list_elements[-q_length_bits:]
 print(f'Берём младшие {q_length_bits} бита результата в качестве подписи, результат: {q_bytes_peace}')
-print(f'Итог Шага 1 Алгоритма формирования подписи: h = h(M) = {q_bytes_peace}')
+print(f'Итог Шага 1 Алгоритма формирования подписи. Наша подпись: h = h(M) = {q_bytes_peace}')
 
 
 print('\nШаг 2, Алгоритм формирования подписи')
@@ -326,6 +325,11 @@ print(f'Вычислить точку эллиптической кривой C 
 dot_p: tuple = (37, 10)
 
 r: int = dot_p[0] % q
+
+print(r)
+print(type(r))
+print(len(str(r)))
+
 print(f'Найдём r малое по формуле: x данной точки по mod {q}, результат r = {r}')
 if r == 0:
     from random import randint
@@ -345,5 +349,103 @@ if s == 0:
 print('\nШаг 6, Алгоритм формирования подписи')
 print('Вычисляем двоичные векторы r и s, и через их конкатинацию вычисляем цифровую подпись')
 
+print('Вычисляем r (в бинарном виде)')
+r_binary = bin(r)[2:]
+# дополняем значение нулями слева
+if len(str(r_binary)) < q_length_bits:
+    r_binary = ('0' * (q_length_bits - len(str(r_binary)))) + str(r_binary)
+print(f'r в десятичном виде: {r}, в двоичном виде: {r_binary}')
 
-print('12:10')
+print('Вычисляем s (в бинарном виде)')
+s_binary = bin(s)[2:]
+# дополняем значение нулями слева
+if len(str(s_binary)) < q_length_bits:
+    s_binary = ('0' * (q_length_bits - len(str(s_binary)))) + str(s_binary)
+print(f's в десятичном виде: {s}, в двоичном виде: {s_binary}')
+
+r_bin_and_s_bin = r_binary + s_binary
+print(f'Электронная подпись, связка r||s = {r_bin_and_s_bin}')
+
+
+
+
+print('\n\n\nАлгоритм проверки подписи')
+print('Шаг 1, Алгоритм проверки подписи')
+print(f'По полученной подписи {r_bin_and_s_bin} вычисляем целые числа r и s')
+print(type(r_bin_and_s_bin)) # TODO: del
+
+# из электронной подписи берём данные в соответствии с битовой длиной q и переводим в десятичное представление
+r_ressurection = int(r_bin_and_s_bin[:q_length_bits], 2)
+s_ressurection = int(r_bin_and_s_bin[q_length_bits:], 2)
+print(f'Число r = {r_ressurection}, число s = {s_ressurection}')
+
+print('Проводим "быструю проверку", что r и s попадают в нужные промежутки по формулам: 0 < r < q и 0 < s < q')
+
+if (0 < r < q):
+    print(f'r = {r} и попадает в нужный промежуток.')
+else:
+    print(f'r = {r} и НЕ попадает в нужный промежуток.')
+
+if (0 < s < q):
+    print(f's = {s} и попадает в нужный промежуток.')
+else:
+    print(f's = {s} и НЕ попадает в нужный промежуток.')
+
+
+print('\nШаг 2, Алгоритм проверки подписи')
+print('Наше исходное сообщение в открытом виде (или зашифровано) доступно, а подпись к нему присоединена.')
+print('Т.е. мы можем взять это сообщение и получить его хеш-код.')
+print('Рассматриваем случай, когда никаких изменений в сообщение не было внесено. Оно без изменений. Поэтому хеш-код сообщения совпадает')
+print(f'Наша текущая подпись h(M) = {q_bytes_peace}')
+
+
+print('\nШаг 3, Алгоритм проверки подписи')
+a_check_sig: int = int(q_bytes_peace, 2)
+print(f'Найдём целое число a, десятичное представление которого вектор h({q_bytes_peace}).\n Результат a = {a_check_sig}')
+
+print('Определим число e по формуле: e = a(mod q), если e = 0, то e = 1')
+e_check_sig: int = a_check_sig % q
+if e_check_sig == 0:
+    e_check_sig = 1
+print(f'Результат: число e = {e_check_sig}')
+
+
+print('\nШаг 4, Алгоритм проверки подписи')
+print(f'Вычисляем значение v по формуле: v = e**-1 mod {q}. Воспользуемся РАЕ.')
+v = rae(e_check_sig, q)
+print(f'Результат после РАЕ: v = {v}')
+
+
+print('\nШаг 5, Алгоритм проверки подписи')
+print('Вычисляем значения по формулам: z1 = s * v (mod q) и z2 = -r * v (mod q)')
+z1_check = (s * v) % q
+z2_check = (-r * v) % q
+print(f'Результаты: z1 = {z1_check}, z2 = {z2_check}')
+
+
+print('\nШаг 6, Алгоритм проверки подписи')
+print('Вычисляем точку эллиптической кривой по формуле: C = z1P + z2Q')
+print('Также определяем R = x * c (mod q)')
+print(f'C = {z1_check}P + {z2_check}Q, в нашем случае мы посчитали, что Q = 3P, значит, С = 4P + 6P = 10P.')
+print('10P можно разделить на 7P + 3P. Т. к. 7 - порядок подгруппы, с которой мы работаем, то точка 7P = 0, а значение 3P известно (37, 10)')
+
+print('Вычисляем R')
+r_big = x3_result_formula_one % q
+print(f'R = {r_big}')
+
+print('\nШаг 7, Алгоритм проверки подписи')
+
+
+
+# for elem in range(len(r_bin_and_s_bin)):
+#     print(r_bin_and_s_bin[:q_length_bits])
+#     r_bin_and_s_bin = r_bin_and_s_bin[q_length_bits:]
+#     print(r_bin_and_s_bin)
+
+
+# # убираем "пустые" элементы ''
+# temp_list = list(filter(bool, temp_list))
+#
+#
+# test = int(r_binary, 2)
+# print(test)
