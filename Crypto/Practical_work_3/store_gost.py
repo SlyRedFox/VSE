@@ -3,62 +3,62 @@ from time import sleep
 from random import randrange
 
 
-# def elliptic_points(a_el: int, b_el: int, x_range_el: tuple) -> list:
-#     """Точки на эллиптической кривой y^2 = x^3 + ax + b в диапазоне значений x."""
-#     points_list: list = []
-#     # Перебираем значения x
-#     for x in range(x_range_el[0], x_range_el[1] + 1):
-#         y2 = x**3 + a_el * x + b_el
-#         if y2 >= 0:  # Проверяем, что y^2 неотрицательно, так как нет действительных корней для отрицательных чисел
-#             # Находим целую часть квадратного корня из y^2
-#             y = int(y2 ** 0.5)
-#
-#
-#             # Проверяем, что квадрат целого числа равен y^2
-#             if y * y == y2:
-#                 points_list.append((x, y))
-#             if (-y) * (-y) == y2 and y != 0:
-#                 points_list.append((x, -y))
-#     return points_list
+def elliptic_points(a_el: int, b_el: int, x_range_el: tuple) -> list:
+    """Точки на эллиптической кривой y^2 = x^3 + ax + b в диапазоне значений x."""
+    points_list: list = []
+    # Перебираем значения x
+    for x in range(x_range_el[0], x_range_el[1] + 1):
+        y2 = x**3 + a_el * x + b_el
+        if y2 >= 0:  # Проверяем, что y^2 неотрицательно, так как нет действительных корней для отрицательных чисел
+            # Находим целую часть квадратного корня из y^2
+            y = int(y2 ** 0.5)
 
 
-def find_points_on_elliptic_curve(a, b, p):
-    """
-    Находит точки на эллиптической кривой y^2 = x^3 + ax + b над конечным полем Z_p.
+            # Проверяем, что квадрат целого числа равен y^2
+            if y * y == y2:
+                points_list.append((x, y))
+            if (-y) * (-y) == y2 and y != 0:
+                points_list.append((x, -y))
+    return points_list
 
-    :param a: Коэффициент a в уравнении эллиптической кривой.
-    :param b: Коэффициент b в уравнении эллиптической кривой.
-    :param p: Простое число, задающее модуль конечного поля.
-    :return: Список точек (x, y), удовлетворяющих уравнению эллиптической кривой.
-    """
+# Пример использования функции нахождения точек эллиптической кривой TODO: del, если будет не нужна
+# a = 4
+# b = 1
+# x_range = (-50, 50)
+# points = elliptic_points(a, b, x_range)
+# print("Points on the elliptic curve:", points)
+
+
+def find_points_on_elliptic_curve(a: int, b: int, p: int) -> list:
+    """Находит точки на эллиптической кривой по известной p и формуле y**2 = x**3 + ax + b"""
     points = []  # Инициализируем пустой список для хранения точек
 
     # Перебираем все возможные значения x от 0 до p-1
     for x in range(p):
-        # Вычисляем правую часть уравнения y^2 = x^3 + ax + b по модулю p
+        # Вычисляем правую часть уравнения y^**2 = x**3 + ax + b по модулю p
         rhs = (x ** 3 + a * x + b) % p
 
         # Перебираем все возможные значения y от 0 до p-1
         for y in range(p):
-            # Вычисляем левую часть уравнения y^2 по модулю p
+            # Вычисляем левую часть уравнения y**2 по модулю p
             lhs = (y ** 2) % p
 
             # Если левая часть равна правой, то (x, y) - точка на кривой
             if lhs == rhs:
                 points.append((x, y))
 
-    return points  # Возвращаем список найденных точек
+    return points
 
 
-# Пример использования функции
+# Пример использования функции find_points_on_elliptic_curve()
 a = 4
 b = 1
 p = 101  # Модуль для конечного поля, достаточно большое простое число
 
-points = find_points_on_elliptic_curve(a, b, p)
-print(f"Points on the elliptic curve y^2 = x^3 + {a}x + {b} over Z_{p}:")
-for point in points:
-    print(point)
+# points = find_points_on_elliptic_curve(a, b, p)
+# print(f"Points on the elliptic curve y^2 = x^3 + {a}x + {b} over Z_{p}:")
+# for point in points:
+#     print(point)
 
 
 

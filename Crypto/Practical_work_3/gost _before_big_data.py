@@ -65,11 +65,11 @@ def elliptic_points(a: int, b: int, x_range: tuple) -> list:
 
             # Проверяем, что квадрат целого числа равен y^2
             if y * y == y2:
-                points.append((x, y))  # Добавляем точку (x, y) в список
+                points_list.append((x, y))  # Добавляем точку (x, y) в список
             if (-y) * (-y) == y2 and y != 0:
-                points.append((x, -y))  # Добавляем точку (x, -y) в список
+                points_list.append((x, -y))  # Добавляем точку (x, -y) в список
 
-    return points  # Возвращаем список найденных точек
+    return points_list  # Возвращаем список найденных точек
 
 
 # Пример использования функции
@@ -253,8 +253,12 @@ print('\n\n\nАлгоритм формирования подписи')
 # Тут сейчас используется тест-переменная:
 # 1
 print('Вычисляем хэш-код сообщения M по формуле: h = h(M)')
-# TODO: используем осмысленное слово или текст, данные ниже для практики
-m_message: str = '1011101110111'
+print('Текст из файла.')
+file_path = 'base_check_file.txt'
+with open(file_path, 'r', encoding='utf-8') as file:
+    m_message = file.read()
+
+print(f'Базовое сообщение: {m_message}')
 
 # # данные для хэширования - начало
 # import hashlib
@@ -304,8 +308,8 @@ print(f'Выполняем хеширование для этого раздел
 temp_list = []
 # создаём список элементов из сообщения длиной q бит
 for elem in range(len(m_message)):
-    temp_list.append(m_message[-3:])
-    m_message = m_message[:-3]
+    temp_list.append(m_message[-q_length_bits:])
+    m_message = m_message[:-q_length_bits]
 
 # убираем "пустые" элементы ''
 temp_list = list(filter(bool, temp_list))
