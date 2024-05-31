@@ -19,7 +19,7 @@ def elliptic_points(a_el: int, b_el: int, x_range_el: tuple) -> list:
                 points_list.append((x, -y))
     return points_list
 
-# Пример использования функции нахождения точек эллиптической кривой TODO: del, если будет не нужна
+# Пример использования функции нахождения точек эллиптической кривой
 # a = 4
 # b = 1
 # x_range = (-50, 50)
@@ -29,14 +29,13 @@ def elliptic_points(a_el: int, b_el: int, x_range_el: tuple) -> list:
 
 def find_points_on_elliptic_curve(a: int, b: int, p: int) -> list:
     """Находит точки на эллиптической кривой по известной p и формуле y**2 = x**3 + ax + b"""
-    points = []  # Инициализируем пустой список для хранения точек
+    points = []
 
     # Перебираем все возможные значения x от 0 до p-1
     for x in range(p):
-        # Вычисляем правую часть уравнения y^**2 = x**3 + ax + b по модулю p
+        # Вычисляем правую часть уравнения y**2 = x**3 + ax + b по модулю p
         rhs = (x ** 3 + a * x + b) % p
 
-        # Перебираем все возможные значения y от 0 до p-1
         for y in range(p):
             # Вычисляем левую часть уравнения y**2 по модулю p
             lhs = (y ** 2) % p
