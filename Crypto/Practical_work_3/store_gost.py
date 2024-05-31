@@ -6,15 +6,13 @@ from random import randrange
 def elliptic_points(a_el: int, b_el: int, x_range_el: tuple) -> list:
     """Точки на эллиптической кривой y^2 = x^3 + ax + b в диапазоне значений x."""
     points_list: list = []
-    # Перебираем значения x
     for x in range(x_range_el[0], x_range_el[1] + 1):
         y2 = x**3 + a_el * x + b_el
-        if y2 >= 0:  # Проверяем, что y^2 неотрицательно, так как нет действительных корней для отрицательных чисел
-            # Находим целую часть квадратного корня из y^2
+        # Проверяем y**2 (должен быть не отрицательным)
+        if y2 >= 0:
+            # Находим целую часть квадратного корня из y**2
             y = int(y2 ** 0.5)
-
-
-            # Проверяем, что квадрат целого числа равен y^2
+            # Квадрат целого числа равен y**2
             if y * y == y2:
                 points_list.append((x, y))
             if (-y) * (-y) == y2 and y != 0:
@@ -90,7 +88,6 @@ def find_simple_q(m: int) -> int:
             q = m // n
             if is_simple_number(q):
                 return q
-    # если не удалось найти простое число q, возвращается False
     return False
 
 
