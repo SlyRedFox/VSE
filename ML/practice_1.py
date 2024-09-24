@@ -15,9 +15,6 @@ def fetch_incidents():
     # Найти таблицу на странице
     table = soup.find('table')
 
-    # if not table:
-    #     return []
-
     rows = table.find_all('tr')
 
     # список словарей данных
