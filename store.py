@@ -1,5 +1,8 @@
 import winreg
 import os
+import platform
+import subprocess
+import wmi
 
 
 def get_user_info_from_registry():
@@ -167,11 +170,6 @@ def get_os_info_from_registry():
         print(f"Ошибка при чтении реестра: {e}")
 
     return os_info
-
-
-import platform
-import subprocess
-import wmi  # Используем WMI для получения данных о видеоадаптере
 
 
 def get_hardware_info():
