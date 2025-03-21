@@ -7,7 +7,7 @@ from store import get_bios_info_from_registry
 from store import get_installed_software
 
 
-print('Выберете, какие данные реестра необходимо отобразить')
+print('Выберете, какие данные реестра необходимо отобразить:')
 print('1 - Информация о пользователях')
 print('2 - Информация о сетевом стеке')
 print('3 - Информация о операционной системе')

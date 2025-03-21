@@ -402,7 +402,7 @@ def get_installed_software() -> list:
                     try:
                         app_info['Дата установки'] = winreg.QueryValueEx(app_key, 'InstallDate')[0]
                     except FileNotFoundError:
-                        app_info['Дата установки'] = 'Нет данных'
+                        app_info['Дата установки'] = 'Нет данных!'
 
                     # Добавляем информацию о приложении в список
                     installed_software.append(app_info)
